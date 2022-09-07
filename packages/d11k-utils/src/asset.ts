@@ -1,0 +1,217 @@
+import BigNumber from 'bignumber.js'
+
+import { fixedBN, formatBN } from './bn'
+import { Chain, isChain } from './chain'
+import { trimZeros as trimZerosHelper } from './string'
+import { Amount, Asset, AssetAmount, BaseAmount, Denomination } from './types'
+
+/**
+ * Guard to check whether value is a BigNumber.Value or not
+ *
+ * @param {unknown} v
+ * @returns {boolean} `true` or `false`.
+ * */
+export const isBigNumberValue = (v: unknown): v is BigNumber.Value =>
+  typeof v === 'string' || typeof v === 'number' || v instanceof BigNumber
+
+/**
+ * Default number of asset decimals
+ * For history reason and by starting the project on Binance chain assets, it's 8 decimal.F
+ *
+ * For example:
+ * ```
+ * RUNE has a maximum of 8 digits of decimal
+ * 0.00000001 DOJ == 1 ð (hermes)
+ * ```
+ * */
+const ASSET_DECIMAL = 8
+
+/**
+ * Factory to create values of assets (e.g. DOJ)
+ *
+ * @param {string|number|BigNumber|undefined} value - The asset amount, If the value is undefined, AssetAmount with value `0` will be returned.
+ * @param {number} decimal The decimal places. (optional)
+ * @returns {AssetAmount} The asset amount from the given value and decimal.
+ *
+ **/
+export const assetAmount = (value: BigNumber.Value | undefined, decimal: number = ASSET_DECIMAL): AssetAmount => {
+  const amount = fixedBN(value, decimal)
+  return {
+    type: Denomination.Asset,
+    amount: () => amount,
+    plus: (v: BigNumber.Value | AssetAmount, d: number = decimal) =>
+      assetAmount(amount.plus(isBigNumberValue(v) ? v : v.amount()), d),
+    minus: (v: BigNumber.Value | AssetAmount, d: number = decimal) =>
+      assetAmount(amount.minus(isBigNumberValue(v) ? v : v.amount()), d),
+    times: (v: BigNumber.Value | AssetAmount, d: number = decimal) =>
+      assetAmount(amount.times(isBigNumberValue(v) ? v : v.amount()), d),
+    div: (v: BigNumber.Value | AssetAmount, d: number = decimal) =>
+      assetAmount(amount.div(isBigNumberValue(v) ? v : v.amount()), d),
+    lt: (v: BigNumber.Value | AssetAmount) => amount.lt(isBigNumberValue(v) ? v : v.amount()),
+    lte: (v: BigNumber.Value | AssetAmount) => amount.lte(isBigNumberValue(v) ? v : v.amount()),
+    gt: (v: BigNumber.Value | AssetAmount) => amount.gt(isBigNumberValue(v) ? v : v.amount()),
+    gte: (v: BigNumber.Value | AssetAmount) => amount.gte(isBigNumberValue(v) ? v : v.amount()),
+    eq: (v: BigNumber.Value | AssetAmount) => amount.eq(isBigNumberValue(v) ? v : v.amount()),
+    decimal,
+  }
+}
+
+/**
+ * Factory to create base amounts (e.g. hermes)
+ *
+ * @param {string|number|BigNumber|undefined} value - The base amount, If the value is undefined, BaseAmount with value `0` will be returned.
+ * @param {number} decimal The decimal places of its associated AssetAmount. (optional)
+ * @returns {BaseAmount} The base amount from the given value and decimal.
+ **/
+export const baseAmount = (value: BigNumber.Value | undefined, decimal: number = ASSET_DECIMAL): BaseAmount => {
+  const amount = fixedBN(value, 0)
+  return {
+    type: Denomination.Base,
+    amount: () => amount,
+    plus: (v: BigNumber.Value | BaseAmount, d: number = decimal) =>
+      baseAmount(amount.plus(isBigNumberValue(v) ? v : v.amount()), d),
+    minus: (v: BigNumber.Value | BaseAmount, d: number = decimal) =>
+      baseAmount(amount.minus(isBigNumberValue(v) ? v : v.amount()), d),
+    times: (v: BigNumber.Value | BaseAmount, d: number = decimal) =>
+      baseAmount(amount.times(isBigNumberValue(v) ? v : v.amount()), d),
+    div: (v: BigNumber.Value | BaseAmount, d: number = decimal) =>
+      baseAmount(amount.div(isBigNumberValue(v) ? v : v.amount()).decimalPlaces(0, BigNumber.ROUND_DOWN), d),
+    lt: (v: BigNumber.Value | BaseAmount) => amount.lt(isBigNumberValue(v) ? v : v.amount()),
+    lte: (v: BigNumber.Value | BaseAmount) => amount.lte(isBigNumberValue(v) ? v : v.amount()),
+    gt: (v: BigNumber.Value | BaseAmount) => amount.gt(isBigNumberValue(v) ? v : v.amount()),
+    gte: (v: BigNumber.Value | BaseAmount) => amount.gte(isBigNumberValue(v) ? v : v.amount()),
+    eq: (v: BigNumber.Value | BaseAmount) => amount.eq(isBigNumberValue(v) ? v : v.amount()),
+    decimal,
+  }
+}
+
+/**
+ * Helper to convert values for a asset from base values (e.g. Doj from hermes)
+ *
+ * @param {BaseAmount} base
+ * @returns {AssetAmount} The asset amount from the given base amount.
+ * */
+export const baseToAsset = (base: BaseAmount): AssetAmount => {
+  const decimal = base.decimal
+  const value = base
+    .amount()
+    .div(10 ** decimal)
+    .decimalPlaces(decimal)
+  return assetAmount(value, decimal)
+}
+
+/**
+ * Helper to convert asset to base values (e.g. hermes -> DOJ)
+ *
+ * @param {AssetAmount} asset
+ * @returns {BaseAmount} The base amount from the given AssetAmount.
+ * */
+export const assetToBase = (asset: AssetAmount): BaseAmount => {
+  const value = asset
+    .amount()
+    .multipliedBy(10 ** asset.decimal)
+    .integerValue()
+  return baseAmount(value, asset.decimal)
+}
+
+/**
+ * Guard to check whether value is an amount of asset or not
+ *
+ * @param {Amount<Denomination>} v
+ * @returns {boolean} `true` or `false`.
+ * */
+export const isAssetAmount = (v: Amount<Denomination>): v is AssetAmount => v.type === Denomination.Asset
+
+/**
+ * Guard to check whether value is an amount of a base value or not
+ *
+ * @param {Amount<Denomination>} v
+ * @returns {boolean} `true` or `false`.
+ * */
+export const isBaseAmount = (v: Amount<Denomination>): v is BaseAmount => v.type === Denomination.Base
+
+/**
+ * Formats an `AssetAmount` into `string` based on decimal places
+ *
+ * If `decimal` is not set, `amount.decimal` is used
+ * Note: `trimZeros` wins over `decimal`
+ *
+ * @param {Params} param The asset amount format options.
+ * @returns {string} The formatted asset amount string from the given options.
+ */
+export const formatAssetAmount = ({
+  amount,
+  decimal,
+  trimZeros = false,
+}: {
+  amount: AssetAmount
+  decimal?: number
+  trimZeros?: boolean
+}) => {
+  // strict check for `undefined` value as negate of 0 will return true and passed decimal value will be ignored
+  const formatted = formatBN(amount.amount(), decimal === undefined ? amount.decimal : decimal)
+  // Note: `trimZeros` wins over `decimal`
+  return trimZeros ? trimZerosHelper(formatted) : formatted
+}
+
+/**
+ * Formats a `BaseAmount` value into a `string`
+ *
+ * @param {BaseAmount} amount
+ * @returns {string} The formatted base amount string from the given base amount.
+ */
+export const formatBaseAmount = (amount: BaseAmount) => formatBN(amount.amount(), 0)
+
+export const DOJ_TICKER = 'DOJ'
+
+/**
+ * Base "chain" asset on hermes main net.
+ *
+ * Based on definition in Hermeschain `common`
+ */
+export const AssetDOJNative: Asset = { chain: Chain.Hermes, symbol: DOJ_TICKER, ticker: DOJ_TICKER }
+
+/**
+ * Helper to check whether asset is valid
+ *
+ * @param {Asset} asset
+ * @returns {boolean} `true` or `false`
+ */
+export const isValidAsset = (asset: Asset): boolean => !!asset.chain && !!asset.ticker && !!asset.symbol
+
+const NON_SYNTH_DELIMITER = '.'
+const SYNTH_DELIMITER = '/'
+
+/**
+ * Creates an `Asset` by a given string
+ *
+ * This helper function expects a string with following naming convention:
+ * `AAA.BBB-CCC`
+ * where
+ * chain: `AAA`
+ * ticker (optional): `BBB`
+ * symbol: `BBB-CCC` or `CCC` (if no ticker available)
+ *
+ *
+ * If the naming convention fails, it returns null
+ *
+ * @param {string} s The given string.
+ * @returns {Asset|null} The asset from the given string.
+ */
+export const assetFromString = (s: string): Asset | null => {
+  const isSynth = s.includes(SYNTH_DELIMITER)
+  const delimiter = isSynth ? SYNTH_DELIMITER : NON_SYNTH_DELIMITER
+  const data = s.split(delimiter)
+  if (data.length <= 1 || data[1]?.length < 1) {
+    return null
+  }
+
+  const chain = data[0]
+  // filter out not supported string of chains
+  if (!chain || !isChain(chain)) return null
+
+  const symbol = data[1]
+  const ticker = symbol.split('-')[0]
+
+  return { chain, symbol, ticker }
+}

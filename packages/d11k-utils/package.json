@@ -1,0 +1,46 @@
+{
+  "name": "@d11k-ts/utils",
+  "version": "0.1.0",
+  "description": "common utils for d11k dojima chain packages",
+  "keywords": [
+    "d11k",
+    "utils",
+    "dojima"
+  ],
+  "author": "bhaagiKenpachi <bhagath.reddy@dojima.network>",
+  "homepage": "https://github.com/dojimanetwork/d11k-ts#readme",
+  "license": "ISC",
+  "main": "src/index.js",
+  "module": "src/index.esm.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dojimanetwork/d11k-ts.git"
+  },
+  "scripts": {
+    "clean": "rimraf src/**",
+    "build": "yarn clean && rollup -c",
+    "test": "jest",
+    "lint": "eslint \"{src,__tests__}/**/*.ts\" --fix --max-warnings 0",
+    "prepublishOnly": "yarn build"
+  },
+  "bugs": {
+    "url": "https://github.com/dojimanetwork/d11k-ts/issues"
+  },
+  "peerDependencies": {
+    "bignumber.js": "9.x"
+  },
+  "devDependencies": {
+    "bignumber.js": "^9.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
