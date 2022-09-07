@@ -11,6 +11,8 @@ results
 packages/d11k-client/.DS_Store
 packages/d11k-client/yarn-error.log
 
+packages/*/lib
 packages/*/yarn.lock
+
 
 .env.idea
