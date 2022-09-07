@@ -10,22 +10,22 @@
   "author": "bhaagiKenpachi <bhagath.reddy@dojima.network>",
   "homepage": "https://github.com/dojimanetwork/d11k-ts#readme",
   "license": "ISC",
-  "main": "src/index.js",
-  "module": "src/index.esm.js",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
   "typings": "lib/index.d.ts",
   "directories": {
-    "lib": "src",
+    "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "src"
+    "lib"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dojimanetwork/d11k-ts.git"
   },
   "scripts": {
-    "clean": "rimraf src/**",
+    "clean": "rimraf lib/**",
     "build": "yarn clean && rollup -c",
     "test": "jest",
     "lint": "eslint \"{src,__tests__}/**/*.ts\" --fix --max-warnings 0",

@@ -216,7 +216,6 @@ export const assetFromString = (s: string): Asset | null => {
   return { chain, symbol, ticker }
 }
 
-
 /**
  * Returns an `Asset` as a string using following naming convention:
  *
@@ -258,7 +257,6 @@ export const currencySymbolByAsset = ({ ticker }: Asset) => {
   }
 }
 
-
 /**
  * Formats a `BaseAmount` into a string of an `AssetAmount`
  *
@@ -269,10 +267,10 @@ export const currencySymbolByAsset = ({ ticker }: Asset) => {
  * @return {string} The formatted base amount string using its currency format.
  */
 export const formatBaseAsAssetAmount = ({
-                                          amount,
-                                          decimal,
-                                          trimZeros = false,
-                                        }: {
+  amount,
+  decimal,
+  trimZeros = false,
+}: {
   amount: BaseAmount
   decimal?: number
   trimZeros?: boolean
@@ -284,10 +282,7 @@ export const formatBaseAsAssetAmount = ({
  * @param {Asset} b Asset two
  * @return {boolean} Result of equality check
  */
-export const eqAsset = (a: Asset, b: Asset) =>
-  a.chain === b.chain && a.symbol === b.symbol && a.ticker === b.ticker
-
-
+export const eqAsset = (a: Asset, b: Asset) => a.chain === b.chain && a.symbol === b.symbol && a.ticker === b.ticker
 
 /**
  * Formats an asset amount using its currency symbol
@@ -301,11 +296,11 @@ export const eqAsset = (a: Asset, b: Asset) =>
  * @return {string} The formatted asset amount string using its currency format.
  */
 export const formatAssetAmountCurrency = ({
-                                            amount,
-                                            asset,
-                                            decimal,
-                                            trimZeros: shouldTrimZeros = false,
-                                          }: {
+  amount,
+  asset,
+  decimal,
+  trimZeros: shouldTrimZeros = false,
+}: {
   amount: AssetAmount
   asset?: Asset
   decimal?: number
