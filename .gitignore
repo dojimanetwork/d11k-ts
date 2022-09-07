@@ -1,1 +1,17 @@
-/.idea
+/node_modules
+dist
+results
+*.log
+.nyc_output
+*.tsbuildinfo
+.DS_Store
+.idea
+
+# Core client
+packages/d11k-client/.DS_Store
+packages/d11k-client/yarn-error.log
+
+packages/*/lib
+packages/*/yarn.lock
+
+.env.idea
