@@ -215,3 +215,117 @@ export const assetFromString = (s: string): Asset | null => {
 
   return { chain, symbol, ticker }
 }
+
+
+/**
+ * Returns an `Asset` as a string using following naming convention:
+ *
+ * `AAA.BBB-CCC`
+ * where
+ * chain: `AAA`
+ * ticker (optional): `BBB`
+ * symbol: `BBB-CCC` or `CCC` (if no ticker available)
+ * symbol (synth): `BBB/CCC` or `CCC` (if no ticker available)
+ *
+ *
+ * @param {Asset} asset The given asset.
+ * @returns {string} The string from the given asset.
+ */
+export const assetToString = ({ chain, symbol }: Asset) => {
+  const delimiter = NON_SYNTH_DELIMITER
+  return `${chain}${delimiter}${symbol}`
+}
+
+/**
+ * Currency symbols currently supported
+ */
+export enum AssetCurrencySymbol {
+  USD = '$',
+}
+
+/**
+ * Returns currency symbols by given `Asset`
+ *
+ * @param {Asset} asset The given asset.
+ * @returns {string} The currency symbol from the given asset.
+ */
+export const currencySymbolByAsset = ({ ticker }: Asset) => {
+  switch (true) {
+    case ticker.includes('USD') || ticker.includes('UST'):
+      return AssetCurrencySymbol.USD
+    default:
+      return ticker
+  }
+}
+
+
+/**
+ * Formats a `BaseAmount` into a string of an `AssetAmount`
+ *
+ * If `decimal` is not set, `amount.decimal` is used
+ * Note: `trimZeros` wins over `decimal`
+ *
+ * @param {Params} params The base amount currency format options.
+ * @return {string} The formatted base amount string using its currency format.
+ */
+export const formatBaseAsAssetAmount = ({
+                                          amount,
+                                          decimal,
+                                          trimZeros = false,
+                                        }: {
+  amount: BaseAmount
+  decimal?: number
+  trimZeros?: boolean
+}) => formatAssetAmount({ amount: baseToAsset(amount), decimal, trimZeros })
+
+/**
+ * Checks equality of two `Assets`
+ * @param {Asset} a Asset one
+ * @param {Asset} b Asset two
+ * @return {boolean} Result of equality check
+ */
+export const eqAsset = (a: Asset, b: Asset) =>
+  a.chain === b.chain && a.symbol === b.symbol && a.ticker === b.ticker
+
+
+
+/**
+ * Formats an asset amount using its currency symbol
+ *
+ * If `decimal` is not set, `amount.decimal` is used
+ * If `asset` is not set, `$` will be used as currency symbol by default
+ * `trimZeros` is `false` by default
+ * Note: `trimZeros` wins over `decimal`
+ *
+ * @param {Params} params The asset amount currency format options.
+ * @return {string} The formatted asset amount string using its currency format.
+ */
+export const formatAssetAmountCurrency = ({
+                                            amount,
+                                            asset,
+                                            decimal,
+                                            trimZeros: shouldTrimZeros = false,
+                                          }: {
+  amount: AssetAmount
+  asset?: Asset
+  decimal?: number
+  trimZeros?: boolean
+}) => {
+  const amountFormatted = formatAssetAmount({
+    amount,
+    // strict check for `undefined` value as negate of 0 will return true and passed decimal value will be ignored
+    decimal: decimal === undefined ? amount.decimal : decimal,
+    trimZeros: shouldTrimZeros,
+  })
+  const ticker = asset?.ticker ?? ''
+
+  if (ticker) {
+    // USD
+    // const regex = new RegExp('USD', 'i')
+    if (ticker.match('USD')) return `${AssetCurrencySymbol.USD} ${amountFormatted}`
+
+    return `${amountFormatted} ${ticker}`
+  }
+
+  return `$ ${amountFormatted}`
+}
