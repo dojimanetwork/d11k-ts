@@ -70,5 +70,9 @@
     "foundry-primitives": "^0.2.1",
     "hdkey": "^2.0.1",
     "uuid": "^8.3.2"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "da5485a97c6bbb2ca588d4b470fbdea769e54ce3"
 }
