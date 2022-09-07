@@ -1,0 +1,42 @@
+{
+  "name": "@d11k-ts/client",
+  "version": "0.1.0",
+  "description": "common client connection package for dojima chains.",
+  "keywords": [
+    "client",
+    "d11k",
+    "dojima"
+  ],
+  "author": "bhaagiKenpachi <bhagath.reddy@dojima.network>",
+  "homepage": "https://github.com/dojimanetwork/d11k-ts#readme",
+  "license": "ISC",
+  "main": "src/index",
+  "types": "lib/index",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dojimanetwork/d11k-ts.git"
+  },
+  "scripts": {
+    "build": "yarn run clean && yarn run compile",
+    "clean": "rimraf -rf src",
+    "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "yarn run build",
+    "test": "jest --passWithNoTests"
+  },
+  "bugs": {
+    "url": "https://github.com/dojimanetwork/d11k-ts/issues"
+  },
+  "devDependencies": {
+    "@d11k-ts/crypto": "^0.1.0",
+    "@d11k-ts/utils": "^0.1.0",
+    "axios": "^0.27.2"
+  },
+  "peerDependencies": {
+    "@d11k-ts/crypto": "^0.1.0",
+    "@d11k-ts/utils": "^0.1.0",
+    "axios": "^0.27.2"
+  }
+}
