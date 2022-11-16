@@ -6,9 +6,9 @@
  * @param {string} value
  * @returns {string} The result after removing trailing zeros.
  */
-export const trimZeros = (value: string): string =>
+export const trimZeros = (value: string) =>
   value
     // (1) remove trailing zeros
-    .replace(/(\.\d*[1-9])0+$|\.0*$/, '$1')
+    .replace(/(\.[0-9]*[1-9])0+$|\.0*$/, '$1')
     // (2) remove leading zeros
-    .replace(/\b0*([1-9]\d*|0)\b/, '$1')
+    .replace(/\b0*([1-9][0-9]*|0)\b/, '$1')

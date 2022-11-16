@@ -5,6 +5,8 @@ import { Chain, isChain } from './chain'
 import { trimZeros as trimZerosHelper } from './string'
 import { Amount, Asset, AssetAmount, BaseAmount, Denomination } from './types'
 
+export type Address = string
+
 /**
  * Guard to check whether value is a BigNumber.Value or not
  *
@@ -20,8 +22,8 @@ export const isBigNumberValue = (v: unknown): v is BigNumber.Value =>
  *
  * For example:
  * ```
- * RUNE has a maximum of 8 digits of decimal
- * 0.00000001 DOJ == 1 ð (hermes)
+ * DOJ has a maximum of 8 digits of decimal
+ * 0.00000001 DOJ (asset) == 1 hermes (base)
  * ```
  * */
 const ASSET_DECIMAL = 8
@@ -86,7 +88,7 @@ export const baseAmount = (value: BigNumber.Value | undefined, decimal: number =
 }
 
 /**
- * Helper to convert values for a asset from base values (e.g. Doj from hermes)
+ * Helper to convert values to an asset from base values (e.g. hermes -> DOJ)
  *
  * @param {BaseAmount} base
  * @returns {AssetAmount} The asset amount from the given base amount.
@@ -101,7 +103,7 @@ export const baseToAsset = (base: BaseAmount): AssetAmount => {
 }
 
 /**
- * Helper to convert asset to base values (e.g. hermes -> DOJ)
+ * Helper to convert asset to base values (e.g. DOJ -> hermes)
  *
  * @param {AssetAmount} asset
  * @returns {BaseAmount} The base amount from the given AssetAmount.
@@ -162,14 +164,81 @@ export const formatAssetAmount = ({
  */
 export const formatBaseAmount = (amount: BaseAmount) => formatBN(amount.amount(), 0)
 
+/**
+ * Base "chain" asset of Avalanche chain.
+ *
+ */
+export const AssetAVAX: Asset = { chain: Chain.Avalanche, symbol: 'AVAX', ticker: 'AVAX', synth: false }
+
+/**
+ * Base "chain" asset of Binance chain.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetBNB: Asset = { chain: Chain.Binance, symbol: 'BNB', ticker: 'BNB', synth: false }
+
+/**
+ * Base "chain" asset on bitcoin main net.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetBTC: Asset = { chain: Chain.Bitcoin, symbol: 'BTC', ticker: 'BTC', synth: false }
+
 export const DOJ_TICKER = 'DOJ'
+
+/**
+ * Base "chain" asset on ethereum main net.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetETH: Asset = { chain: Chain.Ethereum, symbol: 'ETH', ticker: 'ETH', synth: false }
+
+/**
+ * Base "chain" asset for DOJ-67C on Binance test net.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetDOJ67C: Asset = { chain: Chain.Binance, symbol: 'DOJ-67C', ticker: DOJ_TICKER, synth: false }
+
+/**
+ * Base "chain" asset for DOJ-B1A on Binance main net.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetDOJB1A: Asset = { chain: Chain.Binance, symbol: 'DOJ-B1A', ticker: DOJ_TICKER, synth: false }
 
 /**
  * Base "chain" asset on hermes main net.
  *
- * Based on definition in Hermeschain `common`
+ * Based on definition in hermeschain `common`
  */
-export const AssetDOJNative: Asset = { chain: Chain.Hermes, symbol: DOJ_TICKER, ticker: DOJ_TICKER }
+export const AssetDOJNative: Asset = { chain: Chain.Hermes, symbol: DOJ_TICKER, ticker: DOJ_TICKER, synth: false }
+
+/**
+ * Base "chain" asset for DOJ on ethereum main net.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetDOJERC20: Asset = {
+  chain: Chain.Ethereum,
+  symbol: `${DOJ_TICKER}-0x3155ba85d5f96b2d030a4966af206230e46849cb`,
+  ticker: DOJ_TICKER,
+  synth: false,
+}
+
+/**
+ * Base "chain" asset for DOJ on ethereum main net.
+ *
+ * Based on definition in hermeschain `common`
+ */
+export const AssetDOJERC20Testnet: Asset = {
+  chain: Chain.Ethereum,
+  symbol: `${DOJ_TICKER}-0xd601c6A3a36721320573885A8d8420746dA3d7A0`,
+  ticker: DOJ_TICKER,
+  synth: false,
+}
+
+export const AssetAtom: Asset = { chain: Chain.Cosmos, symbol: 'ATOM', ticker: 'ATOM', synth: false }
 
 /**
  * Helper to check whether asset is valid
@@ -179,8 +248,16 @@ export const AssetDOJNative: Asset = { chain: Chain.Hermes, symbol: DOJ_TICKER, 
  */
 export const isValidAsset = (asset: Asset): boolean => !!asset.chain && !!asset.ticker && !!asset.symbol
 
-const NON_SYNTH_DELIMITER = '.'
+/**
+ * Helper to check whether an asset is synth asset
+ *
+ * @param {Asset} asset
+ * @returns {boolean} `true` or `false`
+ */
+export const isSynthAsset = ({ synth }: Asset): boolean => synth
+
 const SYNTH_DELIMITER = '/'
+const NON_SYNTH_DELIMITER = '.'
 
 /**
  * Creates an `Asset` by a given string
@@ -213,7 +290,16 @@ export const assetFromString = (s: string): Asset | null => {
   const symbol = data[1]
   const ticker = symbol.split('-')[0]
 
-  return { chain, symbol, ticker }
+  return { chain, symbol, ticker, synth: isSynth }
+}
+
+/**
+ * Similar to an `assetFromString`, but throws an exception for invalid asset strings
+ */
+export const assetFromStringEx = (s: string): Asset => {
+  const asset = assetFromString(s)
+  if (!asset) throw Error('asset string not correct')
+  return asset
 }
 
 /**
@@ -226,12 +312,11 @@ export const assetFromString = (s: string): Asset | null => {
  * symbol: `BBB-CCC` or `CCC` (if no ticker available)
  * symbol (synth): `BBB/CCC` or `CCC` (if no ticker available)
  *
- *
  * @param {Asset} asset The given asset.
  * @returns {string} The string from the given asset.
  */
-export const assetToString = ({ chain, symbol }: Asset) => {
-  const delimiter = NON_SYNTH_DELIMITER
+export const assetToString = ({ chain, symbol, synth }: Asset) => {
+  const delimiter = synth ? SYNTH_DELIMITER : NON_SYNTH_DELIMITER
   return `${chain}${delimiter}${symbol}`
 }
 
@@ -239,6 +324,10 @@ export const assetToString = ({ chain, symbol }: Asset) => {
  * Currency symbols currently supported
  */
 export enum AssetCurrencySymbol {
+  DOJ = 'D',
+  BTC = '₿',
+  SATOSHI = '⚡',
+  ETH = 'Ξ',
   USD = '$',
 }
 
@@ -250,39 +339,18 @@ export enum AssetCurrencySymbol {
  */
 export const currencySymbolByAsset = ({ ticker }: Asset) => {
   switch (true) {
+    case ticker === DOJ_TICKER:
+      return AssetCurrencySymbol.DOJ
+    case ticker === AssetBTC.ticker:
+      return AssetCurrencySymbol.BTC
+    case ticker === AssetETH.ticker:
+      return AssetCurrencySymbol.ETH
     case ticker.includes('USD') || ticker.includes('UST'):
       return AssetCurrencySymbol.USD
     default:
       return ticker
   }
 }
-
-/**
- * Formats a `BaseAmount` into a string of an `AssetAmount`
- *
- * If `decimal` is not set, `amount.decimal` is used
- * Note: `trimZeros` wins over `decimal`
- *
- * @param {Params} params The base amount currency format options.
- * @return {string} The formatted base amount string using its currency format.
- */
-export const formatBaseAsAssetAmount = ({
-  amount,
-  decimal,
-  trimZeros = false,
-}: {
-  amount: BaseAmount
-  decimal?: number
-  trimZeros?: boolean
-}) => formatAssetAmount({ amount: baseToAsset(amount), decimal, trimZeros })
-
-/**
- * Checks equality of two `Assets`
- * @param {Asset} a Asset one
- * @param {Asset} b Asset two
- * @return {boolean} Result of equality check
- */
-export const eqAsset = (a: Asset, b: Asset) => a.chain === b.chain && a.symbol === b.symbol && a.ticker === b.ticker
 
 /**
  * Formats an asset amount using its currency symbol
@@ -315,12 +383,73 @@ export const formatAssetAmountCurrency = ({
   const ticker = asset?.ticker ?? ''
 
   if (ticker) {
+    // DOJ
+    if (ticker === DOJ_TICKER) return `${AssetCurrencySymbol.DOJ} ${amountFormatted}`
+    // BTC
+    let regex = new RegExp(AssetBTC.ticker, 'i')
+    if (ticker.match(new RegExp(AssetBTC.ticker, 'i'))) {
+      const base = assetToBase(amount)
+      // format all < ₿ 0.01 in statoshi
+      if (base.amount().isLessThanOrEqualTo('1000000')) {
+        return `${AssetCurrencySymbol.SATOSHI} ${formatBaseAmount(base)}`
+      }
+      return `${AssetCurrencySymbol.BTC} ${amountFormatted}`
+    }
+    // ETH
+    regex = new RegExp(AssetETH.ticker, 'i')
+    if (ticker.match(regex)) return `${AssetCurrencySymbol.ETH} ${amountFormatted}`
     // USD
-    // const regex = new RegExp('USD', 'i')
+    regex = new RegExp('USD', 'i')
     if (ticker.match('USD')) return `${AssetCurrencySymbol.USD} ${amountFormatted}`
 
     return `${amountFormatted} ${ticker}`
   }
 
   return `$ ${amountFormatted}`
+}
+
+/**
+ * Formats a `BaseAmount` into a string of an `AssetAmount`
+ *
+ * If `decimal` is not set, `amount.decimal` is used
+ * Note: `trimZeros` wins over `decimal`
+ *
+ * @param {Params} params The base amount currency format options.
+ * @return {string} The formatted base amount string using its currency format.
+ */
+export const formatBaseAsAssetAmount = ({
+  amount,
+  decimal,
+  trimZeros = false,
+}: {
+  amount: BaseAmount
+  decimal?: number
+  trimZeros?: boolean
+}) => formatAssetAmount({ amount: baseToAsset(amount), decimal, trimZeros })
+
+/**
+ * Checks equality of two `Assets`
+ * @param {Asset} a Asset one
+ * @param {Asset} b Asset two
+ * @return {boolean} Result of equality check
+ */
+export const eqAsset = (a: Asset, b: Asset) =>
+  a.chain === b.chain && a.symbol === b.symbol && a.ticker === b.ticker && a.synth === b.synth
+
+/**
+ * Checks whether an asset is `AssetDOJNative`
+ *
+ * @param {Asset} asset
+ * @returns {boolean} `true` or `false`
+ */
+export const isAssetDOJNative = (asset: Asset): boolean => assetToString(asset) === assetToString(AssetDOJNative)
+
+/**
+ * Removes `0x` or `0X` from address
+ */
+export const strip0x = (addr: Address) => addr.replace(/^0(x|X)/, '')
+
+export const getContractAddressFromAsset = (asset: Asset): Address => {
+  const assetAddress = asset.symbol.slice(asset.ticker.length + 1)
+  return strip0x(assetAddress)
 }
