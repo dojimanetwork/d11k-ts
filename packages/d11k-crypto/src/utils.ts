@@ -60,7 +60,7 @@ export const sha256ripemd160 = (hex: string): string => {
  * @param {BufferEncoding} type The buffer encoding type. It will be used when string is provided. (optional)
  * @returns {string} The address generated from the given string or buffer.
  */
-export const encodeAddress = (value: string | Buffer, prefix = 'thor', type: BufferEncoding = 'hex'): string => {
+export const encodeAddress = (value: string | Buffer, prefix = 'dojima', type: BufferEncoding = 'hex'): string => {
   let words
   if (Buffer.isBuffer(value)) {
     words = bech32.toWords(Buffer.from(value))
@@ -79,7 +79,7 @@ export const encodeAddress = (value: string | Buffer, prefix = 'thor', type: Buf
 export const createAddress = (publicKey: Buffer): string => {
   const hexed = ab2hexstring(publicKey)
   const hash = sha256ripemd160(hexed)
-  const address = encodeAddress(hash, 'thor')
+  const address = encodeAddress(hash, 'dojima')
   return address
 }
 
