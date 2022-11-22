@@ -10,10 +10,10 @@
   "author": "bhaagiKenpachi <bhagath.reddy@dojima.network>",
   "homepage": "https://github.com/dojimanetwork/d11k-ts#readme",
   "license": "ISC",
-  "main": "src/index",
+  "main": "lib/index",
   "types": "lib/index",
   "files": [
-    "src"
+    "lib"
   ],
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "yarn run clean && yarn run compile",
-    "clean": "rimraf -rf src",
+    "clean": "rimraf -rf ./lib",
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "yarn run build",
     "test": "jest --passWithNoTests"
@@ -30,13 +30,17 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "devDependencies": {
-    "@d11k-ts/crypto": "^0.1.0",
-    "@d11k-ts/utils": "^0.1.0",
+    "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.1",
     "axios": "^0.27.2"
   },
   "peerDependencies": {
-    "@d11k-ts/crypto": "^0.1.0",
-    "@d11k-ts/utils": "^0.1.0",
+    "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.1",
     "axios": "^0.27.2"
+  },
+  "dependencies": {
+    "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.1"
   }
 }

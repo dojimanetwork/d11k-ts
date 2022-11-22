@@ -1,6 +1,4 @@
-import { Asset, BaseAmount } from '@d11k-ts/utils'
-
-export type Address = string
+import { Address, Asset, BaseAmount } from '@d11k-ts/utils'
 
 export enum Network {
   Mainnet = 'mainnet',
@@ -85,14 +83,14 @@ export type FeeBounds = { lower: number; upper: number }
 
 export type RootDerivationPaths = Record<Network, string>
 
-export type ChainXClientParams = {
+export type ChainClientParams = {
   network?: Network
   phrase?: string
   feeBounds?: FeeBounds
   rootDerivationPaths?: RootDerivationPaths
 }
 
-export interface ChainXClient {
+export interface ChainClient {
   setNetwork(net: Network): void
   getNetwork(): Network
 
@@ -105,6 +103,8 @@ export interface ChainXClient {
 
   setPhrase(phrase: string, walletIndex: number): Address
 
+  // TODO (@xchain-team|@veado) Change params to be an object to be extendable more easily
+  // see changes for `xchain-bitcoin` https://github.com/xchainjs/xchainjs-lib/pull/490
   getBalance(address: Address, assets?: Asset[]): Promise<Balance[]>
 
   getTransactions(params?: TxHistoryParams): Promise<TxsPage>

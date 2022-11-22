@@ -1,10 +1,11 @@
 import { validatePhrase } from '@d11k-ts/crypto'
-import { Asset, Chain } from '@d11k-ts/utils'
+import { Address, Asset, Chain } from '@d11k-ts/utils'
 import axios from 'axios'
 
 import {
-  Address,
   Balance,
+  ChainClient,
+  ChainClientParams,
   FeeBounds,
   FeeRate,
   Fees,
@@ -14,15 +15,13 @@ import {
   TxHistoryParams,
   TxParams,
   TxsPage,
-  ChainXClient,
-  ChainXClientParams,
 } from './types'
 
-const MAINNET_HERMESNODE_API_BASE = 'https://thornode.ninerealms.com/thorchain'
-const STAGENET_HERMESNODE_API_BASE = 'https://stagenet-thornode.ninerealms.com/thorchain'
-const TESTNET_HERMESNODE_API_BASE = 'https://testnet.thornode.thorchain.info/thorchain'
+const MAINNET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
+const STAGENET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
+const TESTNET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
 
-export abstract class BaseChainXClient implements ChainXClient {
+export abstract class BaseChainClient implements ChainClient {
   protected chain: Chain
   protected network: Network
   protected feeBounds: FeeBounds
@@ -35,11 +34,11 @@ export abstract class BaseChainXClient implements ChainXClient {
    * Client has to be initialised with network type and phrase.
    * It will throw an error if an invalid phrase has been passed.
    *
-   * @param {XChainClientParams} params
+   * @param {ChainClientParams} params
    *
    * @throws {"Invalid phrase"} Thrown if the given phase is invalid.
    */
-  constructor(chain: Chain, params: ChainXClientParams) {
+  constructor(chain: Chain, params: ChainClientParams) {
     this.chain = chain
     this.network = params.network || Network.Testnet
     this.feeBounds = params.feeBounds || { lower: 1, upper: Infinity }
@@ -83,12 +82,12 @@ export abstract class BaseChainXClient implements ChainXClient {
 
   protected async getFeeRateFromHermeschain(): Promise<FeeRate> {
     const respData = await this.hermesnodeAPIGet('/inbound_addresses')
-    if (!Array.isArray(respData)) throw new Error('bad response from Thornode API')
+    if (!Array.isArray(respData)) throw new Error('bad response from Hermesnode API')
 
     const chainData: { chain: Chain; gas_rate: string } = respData.find(
       (elem) => elem.chain === this.chain && typeof elem.gas_rate === 'string',
     )
-    if (!chainData) throw new Error(`Thornode API /inbound_addresses does not contain fees for ${this.chain}`)
+    if (!chainData) throw new Error(`Hermesnode API /inbound_addresses does not contain fees for ${this.chain}`)
 
     return Number(chainData.gas_rate)
   }
