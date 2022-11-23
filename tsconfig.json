@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@xchainjs/*": [
+      "@d11k-ts/*": [
         "packages/*"
       ]
     },
