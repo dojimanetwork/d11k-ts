@@ -1,0 +1,60 @@
+{
+  "name": "@d11k-ts/cosmos",
+  "version": "0.1.0",
+  "description": "cosmos module for d11k chain",
+  "keywords": [
+    "d11k",
+    "cosmos",
+    "dojima"
+  ],
+  "author": "yerramreddyuday <uday.prasad@dojima.network>",
+  "homepage": "https://github.com/dojimanetwork/d11k-ts#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dojimanetwork/d11k-ts.git"
+  },
+  "scripts": {
+    "clean": "rimraf lib/**",
+    "build": "rollup -c",
+    "test": "jest",
+    "lint": "eslint \"{src,__tests__}/**/*.ts\" --fix --max-warnings 0",
+    "prepublishOnly": "yarn build"
+  },
+  "bugs": {
+    "url": "https://github.com/dojimanetwork/d11k-ts/issues"
+  },
+  "devDependencies": {
+    "@cosmos-client/core": "0.45.13",
+    "@d11k-ts/client": "^0.1.1",
+    "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.1",
+    "axios": "^0.27.2",
+    "nock": "^13.0.5"
+  },
+  "peerDependencies": {
+    "@cosmos-client/core": "0.45.13",
+    "@d11k-ts/client": "^0.1.1",
+    "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.1",
+    "axios": "^0.27.2"
+  },
+  "dependencies": {
+    "@d11k-ts/client": "^0.1.1",
+    "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.1"
+  }
+}
