@@ -56,8 +56,6 @@ export const getAsset = (denom: string): Asset | null => {
     return {
       chain: CosmosChain,
       symbol: denom,
-      // TODO (xchain-contributors)
-      // Get readable ticker for IBC assets from denom #600 https://github.com/xchainjs/xchainjs-lib/issues/600
       // At the meantime ticker will be empty
       ticker: '',
       synth: false,
@@ -213,7 +211,6 @@ export const getDefaultClientUrls = (): ClientUrls => {
   // Note: In case anyone facing into CORS issue, try the following URLs
   // https://lcd-cosmos.cosmostation.io/
   // https://lcd-cosmoshub.keplr.app/
-  // @see (Discord #xchainjs) https://discord.com/channels/838986635756044328/988096545926828082/988103739967688724
   return {
     [Network.Testnet]: 'https://rest.sentry-02.theta-testnet.polypore.xyz',
     [Network.Stagenet]: mainClientUrl,
