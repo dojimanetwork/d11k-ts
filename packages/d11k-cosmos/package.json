@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/cosmos",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "cosmos module for d11k chain",
   "keywords": [
     "d11k",
