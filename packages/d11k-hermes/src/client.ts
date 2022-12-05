@@ -48,9 +48,9 @@ import {
   TxOfflineParams,
 } from './types'
 import {
-  DECIMAL,
   DEFAULT_GAS_LIMIT_VALUE,
   DEPOSIT_GAS_LIMIT_VALUE,
+  DOJDECIMAL,
   MAX_TX_COUNT,
   defaultExplorerUrls,
   getBalance,
@@ -80,7 +80,7 @@ export interface HermeschainClient {
 /**
  * Custom Hermeschain Client
  */
-class HermesSdkClient extends BaseChainClient implements HermeschainClient, ChainClient {
+class HermesClient extends BaseChainClient implements HermeschainClient, ChainClient {
   private clientUrl: ClientUrl
   private explorerUrls: ExplorerUrls
   private chainIds: ChainIds
@@ -101,8 +101,8 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     phrase,
     clientUrl = {
       [Network.Testnet]: {
-        node: 'http://localhost:1317',
-        rpc: 'http://localhost:26657',
+        node: 'http://api-test.h4s.dojima.network',
+        rpc: 'http://rpc-test.h4s.dojima.network',
       },
       [Network.Stagenet]: {
         node: 'http://localhost:1317',
@@ -122,7 +122,7 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     chainIds = {
       [Network.Mainnet]: 'hermeschain',
       [Network.Stagenet]: 'hermeschain',
-      [Network.Testnet]: 'hermeschain',
+      [Network.Testnet]: 'hermes-testnet',
     },
   }: ChainClientParams & HermeschainClientParams) {
     super(Chain.Cosmos, { network, rootDerivationPaths, phrase })
@@ -423,11 +423,11 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     result.observed_tx.tx.coins.forEach((coin) => {
       from.push({
         from: result.observed_tx.tx.from_address,
-        amount: baseAmount(coin.amount, DECIMAL),
+        amount: baseAmount(coin.amount, DOJDECIMAL),
       })
       to.push({
         to: result.observed_tx.tx.to_address,
-        amount: baseAmount(coin.amount, DECIMAL),
+        amount: baseAmount(coin.amount, DOJDECIMAL),
       })
       asset = assetFromString(coin.asset)
     })
@@ -459,10 +459,10 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
   }: DepositParam): Promise<TxHash> {
     const balances = await this.getBalance(this.getAddress(walletIndex))
     const dojBalance: BaseAmount =
-      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DECIMAL)
+      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJDECIMAL)
     const assetBalance: BaseAmount =
       balances.filter(({ asset: assetInList }) => assetToString(assetInList) === assetToString(asset))[0]?.amount ??
-      baseAmount(0, DECIMAL)
+      baseAmount(0, DOJDECIMAL)
 
     const { average: fee } = await this.getFees()
 
@@ -537,10 +537,10 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
   }: TxParams & { gasLimit?: BigNumber }): Promise<TxHash> {
     const balances = await this.getBalance(this.getAddress(walletIndex), [asset])
     const dojBalance: BaseAmount =
-      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DECIMAL)
+      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJDECIMAL)
     const assetBalance: BaseAmount =
       balances.filter(({ asset: assetInList }) => assetToString(assetInList) === assetToString(asset))[0]?.amount ??
-      baseAmount(0, DECIMAL)
+      baseAmount(0, DOJDECIMAL)
 
     const fee = (await this.getFees()).average
 
@@ -603,7 +603,7 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     recipient,
     memo,
     fromDojBalance: from_doj_balance,
-    fromAssetBalance: from_asset_balance = baseAmount(0, DECIMAL),
+    fromAssetBalance: from_asset_balance = baseAmount(0, DOJDECIMAL),
     fromAccountNumber = Long.ZERO,
     fromSequence = Long.ZERO,
     gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
@@ -669,4 +669,4 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
   }
 }
 
-export { HermesSdkClient }
+export { HermesClient }
