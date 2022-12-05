@@ -39,16 +39,16 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.1",
-    "@d11k-ts/cosmos": "^0.1.0",
+    "@d11k-ts/client": "^0.1.2",
+    "@d11k-ts/cosmos": "^0.1.1",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.1",
     "long": "^4.0.0"
   },
   "devDependencies": {
     "@cosmos-client/core": "0.45.13",
-    "@d11k-ts/client": "^0.1.1",
-    "@d11k-ts/cosmos": "^0.1.0",
+    "@d11k-ts/client": "^0.1.2",
+    "@d11k-ts/cosmos": "^0.1.1",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.1",
     "@types/big.js": "^6.0.0",
@@ -59,8 +59,8 @@
   },
   "peerDependencies": {
     "@cosmos-client/core": "0.45.13",
-    "@d11k-ts/client": "^0.1.1",
-    "@d11k-ts/cosmos": "^0.1.0",
+    "@d11k-ts/client": "^0.1.2",
+    "@d11k-ts/cosmos": "^0.1.1",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.1",
     "axios": "^0.27.2",
