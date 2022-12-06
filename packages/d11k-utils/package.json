@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/utils",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "common utils for d11k dojima chain packages",
   "keywords": [
     "d11k",
