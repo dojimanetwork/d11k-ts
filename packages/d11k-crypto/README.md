@@ -29,14 +29,14 @@ yarn test
 ### Constants
 
 ```js
-// Crypto Constants for xchain
+// Crypto Constants for chain
 const cipher = 'aes-128-ctr'
 const kdf = 'pbkdf2'
 const prf = 'hmac-sha256'
 const dklen = 32
 const c = 262144
 const hashFunction = 'sha256'
-const meta = 'xchain-keystore'
+const meta = 'chain-keystore'
 ```
 
 ### Keystore Type
