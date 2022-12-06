@@ -429,7 +429,6 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
     try {
       singleTxFee = baseAmount(await this.getFeeRateFromHermeschain())
     } catch (error) {
-      console.log(error)
       console.warn(`Error pulling rates from hermeschain, will try alternate`)
     }
     if (!singleTxFee) {
