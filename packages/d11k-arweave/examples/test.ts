@@ -1,7 +1,7 @@
 import { ArweaveClient } from '@d11k-ts/arweave'
 import { Network } from '@d11k-ts/client'
 
-async function checkArweave() {
+async function TestArweave() {
   const phrase = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn'
 
   /** Create Client instance
@@ -118,5 +118,5 @@ async function checkArweave() {
 }
 
 ;(async () => {
-  await checkArweave()
+  await TestArweave()
 })()
