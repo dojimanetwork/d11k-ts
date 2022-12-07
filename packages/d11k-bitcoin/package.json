@@ -38,9 +38,9 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "devDependencies": {
-    "@d11k-ts/client": "^0.1.1",
+    "@d11k-ts/client": "^0.1.3",
     "@d11k-ts/crypto": "^0.1.1",
-    "@d11k-ts/utils": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.2",
     "@types/bitcoinjs-lib": "^5.0.0",
     "@types/wif": "^2.0.2",
     "axios": "^0.27.2",
@@ -49,17 +49,17 @@
     "wif": "^2.0.6"
   },
   "peerDependencies": {
-    "@d11k-ts/client": "^0.1.1",
+    "@d11k-ts/client": "^0.1.3",
     "@d11k-ts/crypto": "^0.1.1",
-    "@d11k-ts/utils": "^0.1.1",
+    "@d11k-ts/utils": "^0.1.2",
     "axios": "^0.27.2",
     "bitcoinjs-lib": "^5.2.0",
     "coinselect": "^3.1.12",
     "wif": "^2.0.6"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.1",
+    "@d11k-ts/client": "^0.1.3",
     "@d11k-ts/crypto": "^0.1.1",
-    "@d11k-ts/utils": "^0.1.1"
+    "@d11k-ts/utils": "^0.1.2"
   }
 }
