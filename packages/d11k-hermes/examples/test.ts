@@ -76,10 +76,12 @@ async function TestHermes() {
    *
    *  {@returns} deposit tx hash: string
    */
+  // 'memo' with ADD
   const depositHash = await hermesClient.deposit({
     amount,
     memo: `ADD:AR.AR:dojima1nh4y3gqxsn7ymm9t45zwsz3h8p9tm7pev8my62`,
   })
+  // 'memo' with SWAP
   // const depositHash = await hermesClient.deposit({
   //   amount,
   //   memo: `SWAP:AR.AR:7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4`,
