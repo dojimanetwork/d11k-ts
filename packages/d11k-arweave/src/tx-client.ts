@@ -200,10 +200,6 @@ export default class ArweaveTxClient {
                 id
                 owner { address }
                 recipient
-                tags {
-                  name
-                  value
-                }
                 block {
                   height
                   id
