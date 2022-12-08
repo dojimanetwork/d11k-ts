@@ -93,7 +93,7 @@ async function TestArweave() {
    * {@params}
    *     amount: number
    *     inboundAddress: ArIBaddress (Get using getArweaveInboundAddress() method)
-   *     dojNodeAddress: string ( dojima node address )
+   *     dojAddress?: string // Optional dojima address
    *
    * {@returns} liquidity pool hash: string
    * */
@@ -109,7 +109,7 @@ async function TestArweave() {
    *     amount: number
    *     token: SwapAssetList
    *     inboundAddress: ArIBaddress (Get using getArweaveInboundAddress() method)
-   *     dojNodeAddress: string ( dojima node address )
+   *     recipient: string (Dojima address)
    *
    * {@returns} tx hash: string
    * */
