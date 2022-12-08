@@ -2,6 +2,7 @@ import { ArweaveClient } from '@d11k-ts/arweave'
 import { Network } from '@d11k-ts/client'
 
 async function TestArweave() {
+  /** Note: Mentioned seed phrase is only for testing purpose */
   const phrase = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn'
 
   /** Create Client instance
@@ -92,8 +93,8 @@ async function TestArweave() {
   /** Add AR token into liquidity pool
    * {@params}
    *     amount: number
-   *     inboundAddress: ArIBaddress (Get using getArweaveInboundAddress() method)
-   *     dojAddress?: string // Optional dojima address
+   *     inboundAddress: string // ArIBaddress (Get using getArweaveInboundAddress() method)
+   *     dojAddress?: string // Optional dojima address. Better to pass doj address but not mandatory
    *
    * {@returns} liquidity pool hash: string
    * */
@@ -107,8 +108,8 @@ async function TestArweave() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList
-   *     inboundAddress: ArIBaddress (Get using getArweaveInboundAddress() method)
+   *     token: SwapAssetList (In this case - D11K.DOJ)
+   *     inboundAddress: string // ArIBaddress (Get using getArweaveInboundAddress() method)
    *     recipient: string (Dojima address)
    *
    * {@returns} tx hash: string
