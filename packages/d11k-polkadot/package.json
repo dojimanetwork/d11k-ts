@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/polkadot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "polkadot module for d11k chain",
   "keywords": [
     "d11k",
