@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/binance-beacon",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "binance beacon chain module for d11k chain",
   "keywords": [
     "d11k",
