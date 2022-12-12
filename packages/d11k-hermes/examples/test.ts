@@ -1,5 +1,5 @@
 import { Network } from '@d11k-ts/client'
-import { DOJDECIMAL, HermesClient } from '@d11k-ts/hermes'
+import { DOJ_DECIMAL, HermesClient } from '@d11k-ts/hermes'
 import { AssetDOJNative, assetAmount, assetToBase, baseToAsset } from '@d11k-ts/utils'
 
 async function TestHermes() {
@@ -63,7 +63,7 @@ async function TestHermes() {
    *
    * {@returns} tx hash: string
    * */
-  const amount = assetToBase(assetAmount(0.1, DOJDECIMAL))
+  const amount = assetToBase(assetAmount(0.1, DOJ_DECIMAL))
   const hash = await hermesClient.transfer({ amount, recipient: 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km' })
   console.log('Tx hash : ', hash)
 
@@ -71,7 +71,7 @@ async function TestHermes() {
    * {@params}
    *     amount: number     Note: convert amount to 'BaseAmount' before passing to transfer function
    *     memo: string
-   *           'ADD:{SwapAssetList}:{hermes-chain-doj-token-node-address}'
+   *           'ADD:{SwapAssetList}:{respective-token-address}'
    *           'SWAP:{SwapAssetList}:{receiver-token-address}'
    *
    *  {@returns} deposit tx hash: string
@@ -79,7 +79,7 @@ async function TestHermes() {
   // 'memo' with ADD
   const depositHash = await hermesClient.deposit({
     amount,
-    memo: `ADD:AR.AR:dojima1nh4y3gqxsn7ymm9t45zwsz3h8p9tm7pev8my62`,
+    memo: `ADD:AR.AR:7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4`,
   })
   // 'memo' with SWAP
   // const depositHash = await hermesClient.deposit({

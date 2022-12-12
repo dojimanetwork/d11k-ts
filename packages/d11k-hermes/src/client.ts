@@ -50,7 +50,7 @@ import {
 import {
   DEFAULT_GAS_LIMIT_VALUE,
   DEPOSIT_GAS_LIMIT_VALUE,
-  DOJDECIMAL,
+  DOJ_DECIMAL,
   MAX_TX_COUNT,
   defaultExplorerUrls,
   getBalance,
@@ -101,8 +101,8 @@ class HermesClient extends BaseChainClient implements HermeschainClient, ChainCl
     phrase,
     clientUrl = {
       [Network.Testnet]: {
-        node: 'http://api-test.h4s.dojima.network',
-        rpc: 'http://rpc-test.h4s.dojima.network',
+        node: 'https://api-test.h4s.dojima.network',
+        rpc: 'https://rpc-test.h4s.dojima.network',
       },
       [Network.Stagenet]: {
         node: 'http://localhost:1317',
@@ -423,11 +423,11 @@ class HermesClient extends BaseChainClient implements HermeschainClient, ChainCl
     result.observed_tx.tx.coins.forEach((coin) => {
       from.push({
         from: result.observed_tx.tx.from_address,
-        amount: baseAmount(coin.amount, DOJDECIMAL),
+        amount: baseAmount(coin.amount, DOJ_DECIMAL),
       })
       to.push({
         to: result.observed_tx.tx.to_address,
-        amount: baseAmount(coin.amount, DOJDECIMAL),
+        amount: baseAmount(coin.amount, DOJ_DECIMAL),
       })
       asset = assetFromString(coin.asset)
     })
@@ -459,10 +459,10 @@ class HermesClient extends BaseChainClient implements HermeschainClient, ChainCl
   }: DepositParam): Promise<TxHash> {
     const balances = await this.getBalance(this.getAddress(walletIndex))
     const dojBalance: BaseAmount =
-      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJDECIMAL)
+      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJ_DECIMAL)
     const assetBalance: BaseAmount =
       balances.filter(({ asset: assetInList }) => assetToString(assetInList) === assetToString(asset))[0]?.amount ??
-      baseAmount(0, DOJDECIMAL)
+      baseAmount(0, DOJ_DECIMAL)
 
     const { average: fee } = await this.getFees()
 
@@ -537,10 +537,10 @@ class HermesClient extends BaseChainClient implements HermeschainClient, ChainCl
   }: TxParams & { gasLimit?: BigNumber }): Promise<TxHash> {
     const balances = await this.getBalance(this.getAddress(walletIndex), [asset])
     const dojBalance: BaseAmount =
-      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJDECIMAL)
+      balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJ_DECIMAL)
     const assetBalance: BaseAmount =
       balances.filter(({ asset: assetInList }) => assetToString(assetInList) === assetToString(asset))[0]?.amount ??
-      baseAmount(0, DOJDECIMAL)
+      baseAmount(0, DOJ_DECIMAL)
 
     const fee = (await this.getFees()).average
 
@@ -603,7 +603,7 @@ class HermesClient extends BaseChainClient implements HermeschainClient, ChainCl
     recipient,
     memo,
     fromDojBalance: from_doj_balance,
-    fromAssetBalance: from_asset_balance = baseAmount(0, DOJDECIMAL),
+    fromAssetBalance: from_asset_balance = baseAmount(0, DOJ_DECIMAL),
     fromAccountNumber = Long.ZERO,
     fromSequence = Long.ZERO,
     gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
