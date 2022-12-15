@@ -17,13 +17,23 @@ export interface SolanaChainClient {
   getTransactionsHistory(params?: SolTxsHistoryParams): Promise<SolTxs>
 }
 
+export type ChainEndpointParams = {
+  endpoint?: string
+}
+
+export const defaultSolEndpoint = web3.clusterApiUrl('mainnet-beta')
+
 class SolanaClient implements SolanaChainClient {
   protected network: Network
   protected cluster: web3.Cluster
   protected connection: web3.Connection
   protected phrase = ''
 
-  constructor({ phrase, network = Network.Mainnet }: ChainClientParams) {
+  constructor({
+    phrase,
+    network = Network.Mainnet,
+    endpoint = defaultSolEndpoint,
+  }: ChainClientParams & ChainEndpointParams) {
     if (phrase) {
       if (!validatePhrase(phrase)) {
         throw new Error('Invalid phrase')
@@ -32,7 +42,10 @@ class SolanaClient implements SolanaChainClient {
     }
     this.network = network
     this.cluster = this.getCluster()
-    this.connection = new web3.Connection(web3.clusterApiUrl(this.cluster), 'confirmed')
+    if (this.network !== Network.Mainnet && endpoint === defaultSolEndpoint) {
+      throw Error(`'endpoint' param can't be empty for 'testnet' or 'stagenet'`)
+    }
+    this.connection = new web3.Connection(endpoint, 'confirmed')
   }
 
   getCluster(): web3.Cluster {
@@ -61,6 +74,14 @@ class SolanaClient implements SolanaChainClient {
     const keypair = await this.getKeypair()
     const address = keypair[index].publicKey.toBase58()
     return address
+  }
+
+  async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
+    const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
+    const pubKey = new web3.PublicKey(address)
+    const amt = baseToLamports(2, SOL_DECIMAL)
+    const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
+    return requestHash
   }
 
   async getBalance(address: string): Promise<number> {
