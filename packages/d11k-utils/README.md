@@ -13,7 +13,7 @@ Utility helpers for D11k clients
 ## Installation
 
 ```
-yarn add @@d11k-ts/utils
+yarn add @d11k-ts/utils
 ```
 The following peer dependencies have to be installed into your project. These are not included in `@d11k-ts/utils`.
 

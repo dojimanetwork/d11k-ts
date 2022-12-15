@@ -1,4 +1,4 @@
-# D11K-CRYPTO
+# `@d11k-ts/crypto`
 
 The D11K CRYPTO package is a crypto package used by all `D11K` clients.
 
