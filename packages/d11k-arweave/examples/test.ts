@@ -10,6 +10,7 @@ async function TestArweave() {
    *  for testnet pass
           config : {
             host: 'ar-test.h4s.dojima.network',
+            protocol: 'https'
             timeout: 100000,
           }
    */
@@ -18,6 +19,7 @@ async function TestArweave() {
     network: Network.Testnet,
     config: {
       host: 'ar-test.h4s.dojima.network',
+      protocol: 'https',
       timeout: 100000,
     },
   })
@@ -31,7 +33,7 @@ async function TestArweave() {
 
   /** Get token balance of address
    * {@params} 'address'
-   *  Note: For testing call mint function once to get 5 dummy AR tokens
+   *  Note: For testing call mint function once to get 2 dummy AR tokens
    * {@returns} balance: number
    * */
   await arClient.mintArTokens('7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
@@ -108,14 +110,16 @@ async function TestArweave() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList (In this case - D11K.DOJ)
+   *     token: SwapAssetList
    *     inboundAddress: string // ArIBaddress (Get using getArweaveInboundAddress() method)
-   *     recipient: string (Dojima address)
+   *     recipient: string (respective recipient token address)
    *
    * {@returns} tx hash: string
    * */
   const swapHash = await arClient.swap(1, 'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
   console.log('Swap tx hash : ', swapHash)
+  // const swapHash = await arClient.swap(5,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+  // console.log('Swap tx hash : ', swapHash)
 }
 
 ;(async () => {
