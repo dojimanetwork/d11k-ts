@@ -76,15 +76,23 @@ async function TestHermes() {
    *
    *  {@returns} deposit tx hash: string
    */
-  // 'memo' with ADD
+  /** 'memo' with ADD */
   const depositHash = await hermesClient.deposit({
     amount,
     memo: `ADD:AR.AR:7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4`,
   })
-  // 'memo' with SWAP
+  // const depositHash = await hermesClient.deposit({
+  //   amount,
+  //   memo: `ADD:DOT.DOT:5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH`,
+  // })
+  /** 'memo' with SWAP */
   // const depositHash = await hermesClient.deposit({
   //   amount,
   //   memo: `SWAP:AR.AR:7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4`,
+  // })
+  // const depositHash = await hermesClient.deposit({
+  //   amount,
+  //   memo: `SWAP:DOT.DOT:5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH`,
   // })
   console.log('Deposit tx hash :: ', depositHash)
 }
