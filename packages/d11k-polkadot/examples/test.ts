@@ -7,8 +7,15 @@ async function checkPolka() {
 
   /** Create Client instance
    *  {@params} 'seed-phrase' and 'network'
+   * for testnet/devnet pass {
+   *    provider: 'wss://dotws-test.h4s.dojima.network:9944'
+   *  }
    */
-  const polkaClient = new PolkadotClient({ phrase, network: Network.Testnet })
+  const polkaClient = new PolkadotClient({
+    phrase,
+    network: Network.Testnet,
+    provider: 'wss://dotws-test.h4s.dojima.network:9944',
+  })
 
   /** Generate Address for phrase
    *
@@ -81,9 +88,9 @@ async function checkPolka() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList (In this case - D11K.DOJ)
+   *     token: SwapAssetList
    *     inboundAddress: string // ArIBaddress (Get using getPolkadotInboundAddress() method)
-   *     recipient: string (Dojima address)
+   *     recipient: string (respective recipient token address)
    *
    * {@returns} tx hash: string
    * */
@@ -94,6 +101,8 @@ async function checkPolka() {
     'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',
   )
   console.log('Swap tx hash : ', swapHash)
+  // const swapHash = await polkaClient.swap(5, 'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
+  // console.log('Swap tx hash : ', swapHash)
 
   /** Stop polka instance
    *
