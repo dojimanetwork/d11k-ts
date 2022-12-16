@@ -32,7 +32,7 @@ This package uses the following service providers:
 
 Etherscan API rate limits: https://info.etherscan.com/api-return-errors/
 
-- Testnet API - https://goerli.etherscan.io
+- Testnet API - https://api-goerli.etherscan.io , Explorer - https://goerli.etherscan.io/
 
 - This package uses `etherjs` library, by default it uses several providers. (`https://docs.ethers.io/v5/api-keys/`)
 
