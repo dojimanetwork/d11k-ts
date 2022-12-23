@@ -15,6 +15,18 @@ export abstract class UTXOClient extends Client {
     }
   }
 
+  async getFeesFromInputRates(rates: FeeRates, memo?: string): Promise<FeesWithRates> {
+    return {
+      fees: await calcFeesAsync(rates, this.calcFee.bind(this), memo),
+      rates,
+    }
+  }
+
+  async getFeesFromInput(rates: FeeRates, memo?: string): Promise<Fees> {
+    const { fees } = await this.getFeesFromInputRates(rates, memo)
+    return fees
+  }
+
   async getFees(memo?: string): Promise<Fees> {
     const { fees } = await this.getFeesWithRates(memo)
     return fees
