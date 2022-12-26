@@ -462,7 +462,10 @@ class EthereumClient extends BaseChainClient implements ChainClient, EthClient {
    * @throws {"Need to provide valid txId"}
    * Thrown if the given txId is invalid.
    */
-  async getTransactionData(txId: string, assetAddress?: Address): Promise<Tx> {
+  async getTransactionData(
+    txId: string,
+    // assetAddress?: Address
+  ): Promise<Tx> {
     switch (this.getNetwork()) {
       case Network.Mainnet:
       case Network.Stagenet: {
@@ -478,29 +481,29 @@ class EthereumClient extends BaseChainClient implements ChainClient, EthClient {
         const etherscan = this.getEtherscanProvider()
         const txInfo = await etherscan.getTransaction(txId)
         if (txInfo) {
-          if (assetAddress) {
-            tx =
-              (
-                await etherscanAPI.getTokenTransactionHistory({
-                  baseUrl: etherscan.baseUrl,
-                  assetAddress,
-                  startblock: txInfo.blockNumber,
-                  endblock: txInfo.blockNumber,
-                  apiKey: etherscan.apiKey as string,
-                })
-              ).filter((info) => info.hash === txId)[0] ?? null
-          } else {
-            tx =
-              (
-                await etherscanAPI.getETHTransactionHistory({
-                  baseUrl: etherscan.baseUrl,
-                  startblock: txInfo.blockNumber,
-                  endblock: txInfo.blockNumber,
-                  apiKey: etherscan.apiKey as string,
-                  address: txInfo.from,
-                })
-              ).filter((info) => info.hash === txId)[0] ?? null
-          }
+          // if (assetAddress) {
+          //   tx =
+          //     (
+          //       await etherscanAPI.getTokenTransactionHistory({
+          //         baseUrl: etherscan.baseUrl,
+          //         assetAddress,
+          //         startblock: txInfo.blockNumber,
+          //         endblock: txInfo.blockNumber,
+          //         apiKey: etherscan.apiKey as string,
+          //       })
+          //     ).filter((info) => info.hash === txId)[0] ?? null
+          // } else {
+          tx =
+            (
+              await etherscanAPI.getETHTransactionHistory({
+                baseUrl: etherscan.baseUrl,
+                startblock: txInfo.blockNumber,
+                endblock: txInfo.blockNumber,
+                apiKey: etherscan.apiKey as string,
+                address: txInfo.from,
+              })
+            ).filter((info) => info.hash === txId)[0] ?? null
+          // }
         }
 
         if (!tx) throw new Error('Could not get transaction history')
