@@ -37,7 +37,7 @@ const connectWallet = async () => {
   // devnet
   // const solClient = new SolanaClient({
   //    phrase, 
-  //    network: Network.Stagenet
+  //    network: Network.Testnet
   //    endpoint: 'https://sol-test.h4s.dojima.network:8899'
   // })
   let address = solClient.getAddress()
@@ -71,7 +71,7 @@ const connectWallet = async () => {
   // devnet
   // const solClient = new SolanaClient({
   //    phrase, 
-  //    network: Network.Stagenet
+  //    network: Network.Testnet
   //    endpoint: 'https://sol-test.h4s.dojima.network:8899'
   // })
   let address = solClient.getAddress()
