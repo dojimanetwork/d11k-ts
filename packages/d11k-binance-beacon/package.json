@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/binance-beacon",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "binance beacon chain module for d11k chain",
   "keywords": [
     "d11k",
@@ -41,19 +41,19 @@
   },
   "devDependencies": {
     "@binance-chain/javascript-sdk": "^4.2.0",
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.3",
     "@types/big.js": "^4.0.5"
   },
   "peerDependencies": {
     "@binance-chain/javascript-sdk": "^4.2.0",
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.3"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.3"
   }
