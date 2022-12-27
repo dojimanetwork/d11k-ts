@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/ethereum",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "ethereum module for d11k chain",
   "keywords": [
     "d11k",
@@ -38,21 +38,21 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.3",
     "axios": "^1.2.1",
     "ethers": "^5.7.2"
   },
   "devDependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.3",
     "axios": "^1.2.1",
     "ethers": "^5.7.2"
   },
   "peerDependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@d11k-ts/utils": "^0.1.3",
     "axios": "^1.2.1",
