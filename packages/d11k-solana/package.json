@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/solana",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "solana module for d11k chain",
   "keywords": [
     "d11k",
@@ -35,7 +35,7 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1",
     "@solana/web3.js": "^1.67.0",
     "bignumber.js": "^9.1.0",
@@ -44,11 +44,11 @@
     "moment": "^2.29.4"
   },
   "devDependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1"
   },
   "peerDependencies": {
-    "@d11k-ts/client": "^0.1.4",
+    "@d11k-ts/client": "^0.1.5",
     "@d11k-ts/crypto": "^0.1.1"
   },
   "publishConfig": {
