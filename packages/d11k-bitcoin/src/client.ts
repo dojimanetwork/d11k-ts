@@ -13,6 +13,7 @@ import {
   TxsPage,
   UTXOClient,
   checkFeeBounds,
+  standardFeeRates
 } from '@d11k-ts/client'
 import { getSeed } from '@d11k-ts/crypto'
 import { Address, Asset, AssetBTC, Chain, assetAmount, assetToBase } from '@d11k-ts/utils'
@@ -49,9 +50,9 @@ class BitcoinClient extends UTXOClient {
     },
     sochainUrl = 'https://chain.so/api/v2',
     haskoinUrl = {
-      [Network.Testnet]: 'https://haskoin.ninerealms.com/btctest',
-      [Network.Mainnet]: 'https://haskoin.ninerealms.com/btc',
-      [Network.Stagenet]: 'https://haskoin.ninerealms.com/btc',
+      [Network.Testnet]: 'https://api.haskoin.com/btctest',
+      [Network.Mainnet]: 'https://api.haskoin.com/btc',
+      [Network.Stagenet]: 'https://api.haskoin.com/btc',
     },
     rootDerivationPaths = {
       [Network.Mainnet]: `84'/0'/0'/0/`, //note this isn't bip44 compliant, but it keeps the wallets generated compatible to pre HD wallets
@@ -290,7 +291,8 @@ class BitcoinClient extends UTXOClient {
     const fromAddressIndex = params?.walletIndex || 0
 
     // set the default fee rate to `fast`
-    const feeRate = params.feeRate || (await this.getFeeRates())[FeeOption.Fast]
+    // const feeRate = params.feeRate || (await this.getFeeRates())[FeeOption.Fast]
+    const feeRate = params.feeRate || standardFeeRates(await this.getSuggestedFeeRate())[FeeOption.Fast]
     checkFeeBounds(this.feeBounds, feeRate)
 
     /**
@@ -316,10 +318,10 @@ class BitcoinClient extends UTXOClient {
     const txHex = psbt.extractTransaction().toHex() // TX extracted and formatted to hex
 
     try {
-      return await Utils.haskoinbroadcastTx({ txHex, haskoinUrl })
+      return await Utils.sochainbroadcastTx({ sochainUrl: this.sochainUrl, txHex, network: this.network })
     } catch (error) {
-      if (error instanceof Error && error.message === 'Request failed with status code 404') {
-        return await Utils.sochainbroadcastTx({ sochainUrl: this.sochainUrl, txHex, network: this.network })
+      if (error instanceof Error && error.message === 'Request failed') {
+        return await Utils.haskoinbroadcastTx({ txHex, haskoinUrl })
       } else {
         return Promise.reject(error)
       }
