@@ -51,41 +51,6 @@ const connectWallet = async () => {
 }
 ```
 
-### Request airdrop - testnet 'sol' tokens using SolanaClient
-
-- Create new Solana client
-- Network is set to `devnet`
-- By default `2 SOL` tokens were added to address on every call
-- `Note: Devnet tokens are not useful in Mainnet`
-
-```ts
-// Imports
-import {SolanaClient} from '@d11k-ts/solana'
-import {Network} from "@d11k-ts/client";
-
-//Connect wallet, get address, request sol tokens and check balance 
-const connectWallet = async () => {
-  let phrase = "phrase"
-  // Mainnet
-  const solClient = new SolanaClient({phrase})
-  // devnet
-  // const solClient = new SolanaClient({
-  //    phrase, 
-  //    network: Network.Testnet
-  //    endpoint: 'https://sol-test.h4s.dojima.network:8899'
-  // })
-  let address = solClient.getAddress()
-  try {
-    await solClient.requestSolTokens(address)
-    const balance = await solClient.getBalance(address)
-    console.log(`Address: ${address} with balance ${balance}`)
-
-  } catch (error) {
-    console.log(`Caught: ${error} `)
-  }
-}
-```
-
 ### Transfer sol using SolanaClient
 
 - Create new SolanaClient instance

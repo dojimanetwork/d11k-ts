@@ -13,7 +13,7 @@ import {
   TxsPage,
   UTXOClient,
   checkFeeBounds,
-  standardFeeRates
+  standardFeeRates,
 } from '@d11k-ts/client'
 import { getSeed } from '@d11k-ts/crypto'
 import { Address, Asset, AssetBTC, Chain, assetAmount, assetToBase } from '@d11k-ts/utils'
