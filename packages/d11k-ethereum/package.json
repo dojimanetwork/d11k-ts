@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/ethereum",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "ethereum module for d11k chain",
   "keywords": [
     "d11k",
