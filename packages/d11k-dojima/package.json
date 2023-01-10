@@ -1,0 +1,60 @@
+{
+  "name": "@d11k-ts/dojima",
+  "version": "0.1.0",
+  "description": "dojima module for d11k chain",
+  "keywords": [
+    "d11k",
+    "dojima"
+  ],
+  "author": "yerramreddyuday <uday.prasad@dojima.network>",
+  "homepage": "https://github.com/dojimanetwork/d11k-ts#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dojimanetwork/d11k-ts.git"
+  },
+  "scripts": {
+    "clean": "rimraf lib/**",
+    "build": "yarn && yarn clean && rollup -c",
+    "test": "jest",
+    "lint": "eslint \"{src,__tests__, __mocks__}/**/*.ts\" --fix --max-warnings 0",
+    "prepublishOnly": "yarn build"
+  },
+  "bugs": {
+    "url": "https://github.com/dojimanetwork/d11k-ts/issues"
+  },
+  "dependencies": {
+    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/crypto": "^0.1.1",
+    "bignumber.js": "^9.1.1",
+    "ethers": "^5.7.2",
+    "web3": "^1.8.1"
+  },
+  "devDependencies": {
+    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/crypto": "^0.1.1",
+    "bignumber.js": "^9.1.1",
+    "ethers": "^5.7.2",
+    "web3": "^1.8.1"
+  },
+  "peerDependencies": {
+    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/crypto": "^0.1.1",
+    "bignumber.js": "^9.1.1",
+    "ethers": "^5.7.2",
+    "web3": "^1.8.1"
+  }
+}
