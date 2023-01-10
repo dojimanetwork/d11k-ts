@@ -76,14 +76,6 @@ class SolanaClient implements SolanaChainClient {
     return address
   }
 
-  async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
-    const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
-    const pubKey = new web3.PublicKey(address)
-    const amt = baseToLamports(2, SOL_DECIMAL)
-    const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
-    return requestHash
-  }
-
   async getBalance(address: string): Promise<number> {
     // Get account details
     const pubKey = new web3.PublicKey(address)

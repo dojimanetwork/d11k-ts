@@ -26,11 +26,8 @@ async function checkSolana() {
 
   /** Get token balance of address
    * {@params} 'address'
-   *  Note: For testing call requestAirdrop function once to get 2 dummy SOL tokens
    * {@returns} balance: number
    * */
-  const requestAirdrop = await solClient.requestSolTokens('', address)
-  console.log('Airdrop hash :: ', requestAirdrop)
   const bal = await solClient.getBalance('DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
   console.log('Balance :: ', bal)
 
