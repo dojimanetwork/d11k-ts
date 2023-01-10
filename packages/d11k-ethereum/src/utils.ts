@@ -15,6 +15,7 @@ import {
 import { Signer, ethers, providers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 
+import { ETH_DECIMAL } from './const'
 import erc20ABI from './data/erc20.json'
 import {
   ETHTransactionInfo,
@@ -27,7 +28,6 @@ import {
   TransactionOperation,
 } from './types'
 
-export const ETH_DECIMAL = 18
 export const ETHPLORER_FREEKEY = 'freekey'
 
 // from https://github.com/MetaMask/metamask-extension/blob/ee205b893fe61dc4736efc576e0663189a9d23da/ui/app/pages/send/send.constants.js#L39
