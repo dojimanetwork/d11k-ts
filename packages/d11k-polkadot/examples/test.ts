@@ -63,6 +63,18 @@ async function checkPolka() {
   const inboundAddress = await polkaClient.getPolkadotInboundAddress()
   console.log('Inbound Address :: ', inboundAddress)
 
+  /** Dummy transaction using memo
+   * {@params}
+   *     amount: number
+   *     recipient: address
+   *     memo: string       // Ex: 'memo:NOOP:NOVAULT'
+   *
+   * {@returns} tx hash: string
+   * */
+
+  const batchTxHash = await polkaClient.polkaBatchTxsToHermes(2, inboundAddress, 'memo:NOOP:NOVAULT')
+  console.log('Batch Tx hash :: ', batchTxHash)
+
   /** Get default liquidity pool gas fee
    *
    * {@returns} LP gas fee: number
@@ -81,7 +93,7 @@ async function checkPolka() {
   const liquidityPoolHash = await polkaClient.addLiquidityPool(
     1,
     inboundAddress,
-    'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',
+    // 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',     // optional
   )
   console.log('Liquidity pool hash : ', liquidityPoolHash)
 
@@ -94,15 +106,19 @@ async function checkPolka() {
    *
    * {@returns} tx hash: string
    * */
-  const swapHash = await polkaClient.swap(
-    1,
-    'D11K.DOJ',
+  // const d11kswapHash = await polkaClient.swap(1,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
+  // console.log('Swap tx hash : ', d11kswapHash)
+  // const arswapHash = await polkaClient.swap(5,'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
+  // console.log('Swap tx hash : ', arswapHash)
+  // const ethswapHash = await polkaClient.swap(2,'ETH.ETH', inboundAddress, '0x0577e1E35C4f30cA8379269B7Fd85cBCE7F084f4')
+  // console.log('ETH Swap tx hash : ', ethswapHash)
+  const solswapHash = await polkaClient.swap(
+    3,
+    'SOL.SOL',
     inboundAddress,
-    'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',
+    'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS',
   )
-  console.log('Swap tx hash : ', swapHash)
-  // const swapHash = await polkaClient.swap(5, 'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
-  // console.log('Swap tx hash : ', swapHash)
+  console.log('SOL Swap tx hash : ', solswapHash)
 
   /** Stop polka instance
    *
