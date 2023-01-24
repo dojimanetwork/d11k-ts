@@ -73,15 +73,15 @@ async function checkSolana() {
    *
    * {@returns} Sol Inbound address: string
    * */
-  // const inboundAddress = await solClient.getSolanaInboundAddress()
-  // console.log('Inbound Address :: ', inboundAddress)
+  const inboundAddress = await solClient.getSolanaInboundAddress()
+  console.log('Inbound Address :: ', inboundAddress)
 
   /** Get default liquidity pool gas fee
    *
    * {@returns} LP gas fee: number
    * */
-  // const LPDefaultGasFee = await solClient.getDefaultLiquidityPoolGasFee()
-  // console.log('Liquidity pool default gas fee :: ', LPDefaultGasFee)
+  const LPDefaultGasFee = await solClient.getDefaultLiquidityPoolGasFee()
+  console.log('Liquidity pool default gas fee :: ', LPDefaultGasFee)
 
   /** Add SOL token into liquidity pool
    * {@params}
@@ -91,12 +91,12 @@ async function checkSolana() {
    *
    * {@returns} liquidity pool hash: string
    * */
-  // const liquidityPoolHash = await solClient.addLiquidityPool(
-  //   1,
-  //   inboundAddress,
-  //   'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',
-  // )
-  // console.log('Liquidity pool hash : ', liquidityPoolHash)
+  const liquidityPoolHash = await solClient.addLiquidityPool(
+    1,
+    inboundAddress,
+    'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',
+  )
+  console.log('Liquidity pool hash : ', liquidityPoolHash)
 
   /** Swap token from liquidity pool to receiver address
    * {@params}
@@ -107,8 +107,8 @@ async function checkSolana() {
    *
    * {@returns} tx hash: string
    * */
-  // const swapHash = await solClient.swap(1, 'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
-  // console.log('Swap tx hash : ', swapHash)
+  const swapHash = await solClient.swap(1, 'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
+  console.log('Swap tx hash : ', swapHash)
 }
 
 ;(async () => {
