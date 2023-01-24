@@ -115,6 +115,54 @@ const feeEstimations = async () => {
 }
 ```
 
+### Add ETH token into liquidity pool
+
+- Add ETH tokens into liquidity pool
+- Get Ethereum Inbound address from hermes chain
+
+```ts
+const addETHToLiquidityPool = async () => {
+  let amountToTransfer = 0.001
+  const inboundAddress = await ethClient.getEthereumInboundAddress()
+  try {
+    const liquidityPoolHash = await ethClient.addLiquidityPool(
+      amountToTransfer,
+      inboundAddress,
+      dojAddress,           // optional dojima address
+    )
+    console.log('Liquidity pool hash : ', liquidityPoolHash)
+  } catch (error) {
+    console.log(`Caught ${error}`)
+  }
+}
+```
+
+### Swap ETH tokens
+
+- Swap ETH tokens to required token using receiver address
+- Get Ethereum Inbound address from hermes chain
+- Supported tokens for swapping - 'DOT', 'DOJ', 'AR', 'SOL'
+
+```ts
+import {SwapAssetList} from '@d11k-ts/utils'
+
+const swapETH = async () => {
+  let amountToTransfer = 0.001
+  const inboundAddress = await ethClient.getEthereumInboundAddress()
+  try {
+    const swapHash = await ethClient.swap(
+       amountToTransfer,
+      SwapAssetList,
+      inboundAddress,
+      reciepient                // Respective receiver SwapAssetList token address
+    )
+    console.log('Swap tx hash : ', swapHash)
+  } catch (error) {
+    console.log(`Caught ${error}`)
+  }
+}
+```
+
 [//]: # (# `@d11k-ts/ethereum`)
 
 [//]: # ()
