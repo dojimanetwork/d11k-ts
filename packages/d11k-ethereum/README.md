@@ -34,6 +34,7 @@ const connectWallet = async () => {
   // const ethClient = new EthereumClient({ 
   //    phrase, 
   //    network: Network.Testnet,
+  //    rpcUrl: 'https://eth-test.h4s.dojima.network/',  // or
   //    rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
   //  })
   let address = ethClient.getAddress()

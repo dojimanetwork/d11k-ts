@@ -10,14 +10,15 @@ async function checkEth() {
    *  {@params}
    *    'seed-phrase' and 'network'
    *    for devnet/testnet pass {
-   *      endpoint: 'https://eth-test.h4s.dojima.network:9545/'
+   *      endpoint: 'https://eth-test.h4s.dojima.network/'  or  'https://eth-test.h4s.dojima.network:9545/'
    *    }
    *    infuraApiKey: string, Optional (Api key provided by 'Infura' for mainnet calls. Sign up for getting one)
    */
   const ethClient = new EthereumClient({
     phrase,
     network: Network.Testnet,
-    rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+    rpcUrl: 'https://eth-test.h4s.dojima.network/',
+    // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
   })
 
   /** Generate Address for phrase
