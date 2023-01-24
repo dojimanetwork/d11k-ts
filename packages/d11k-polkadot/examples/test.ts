@@ -100,7 +100,7 @@ async function checkPolka() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList
+   *     token: SwapAssetList     (Ex: AR.AR, D11K.DOJ, ETH.ETH, SOL.SOL)
    *     inboundAddress: string // ArIBaddress (Get using getPolkadotInboundAddress() method)
    *     recipient: string (respective recipient token address)
    *

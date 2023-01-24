@@ -94,21 +94,27 @@ async function checkSolana() {
   const liquidityPoolHash = await solClient.addLiquidityPool(
     1,
     inboundAddress,
-    'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',
+    // 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km',     // optional
   )
   console.log('Liquidity pool hash : ', liquidityPoolHash)
 
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList (In this case - D11K.DOJ)
+   *     token: SwapAssetList     (Ex: AR.AR, DOT.DOT, D11K.DOJ, ETH.ETH)
    *     inboundAddress: string // SolIBaddress (Get using getArweaveInboundAddress() method)
    *     recipient: string (Dojima address)
    *
    * {@returns} tx hash: string
    * */
-  const swapHash = await solClient.swap(1, 'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
-  console.log('Swap tx hash : ', swapHash)
+  // const dotswapHash = await arClient.swap(3,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+  // console.log('DOT Swap tx hash : ', dotswapHash)
+  // const d11kswapHash = await solClient.swap(1,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
+  // console.log('Swap tx hash : ', d11kswapHash)
+  const arswapHash = await solClient.swap(5, 'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
+  console.log('Swap tx hash : ', arswapHash)
+  // const ethswapHash = await solClient.swap(2,'ETH.ETH', inboundAddress, '0x0577e1E35C4f30cA8379269B7Fd85cBCE7F084f4')
+  // console.log('ETH Swap tx hash : ', ethswapHash)
 }
 
 ;(async () => {

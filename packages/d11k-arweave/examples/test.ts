@@ -110,7 +110,7 @@ async function TestArweave() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList
+   *     token: SwapAssetList     (Ex: DOT.DOT, D11K.DOJ, ETH.ETH, SOL.SOL)
    *     inboundAddress: string // ArIBaddress (Get using getArweaveInboundAddress() method)
    *     recipient: string (respective recipient token address)
    *
