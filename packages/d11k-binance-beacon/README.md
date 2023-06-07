@@ -57,6 +57,13 @@ const connectWallet = async () => {
   const bnbClient = new BinanceBeaconClient({phrase})
   // testnet
   // const bnbClient = new BinanceBeaconClient({ phrase, network: Network.Testnet })
+  // 
+  // For 'doj-testnet add this along with phrase
+  // const bnbClient = new BinanceBeaconClient({
+  //   phrase,
+  //   network: Network.DojTestnet,
+  //   dojClientUrl: 'https://bnb-test.h4s.dojima.network'
+  // });
   let address = bnbClient.getAddress()
   console.log(`Asset Address is: ${address}`)
 
@@ -104,6 +111,7 @@ const transferBnb = async () => {
 ### Get transaction Data & transaction History
 
 - Create new Binance-beaconClient instance
+- **Note**: Doj-testnet doesn't provide txData and txs list
 - Call getTransactionData(hash) returns hash-details
 - Call getTransactions(address) returns list of transactions (if any)
 
@@ -145,6 +153,84 @@ try {
   console.log(error)
 }
 
+```
+### Get Binance Inbound address
+
+- Get Binance Inbound address from hermes chain
+- Can be used in adding liquidity pool and swapping
+
+```ts
+const inboundAddr = async () => {
+  try {
+    const inboundAddress = await bnbClient.getBinanceInboundAddress()
+    console.log('Inbound Address :: ', inboundAddress)
+  } catch (error) {
+    console.log(`Caught ${error}`)
+  }
+}
+```
+
+### Get default liquidity pool gas fee
+
+- Get Binance default liquidity pool gas fee from hermes chain
+
+```ts
+const defaultLPGasFee = async () => {
+  try {
+    const LPDefaultGasFee = await bnbClient.getDefaultLiquidityPoolGasFee()
+    console.log('Liquidity pool default gas fee :: ', LPDefaultGasFee)
+  } catch (error) {
+    console.log(`Caught ${error}`)
+  }
+}
+```
+
+### Add BNB token into liquidity pool
+
+- Add BNB tokens into liquidity pool
+- Get Binance Inbound address from hermes chain
+
+```ts
+const addBNBToLiquidityPool = async () => {
+  let amountToTransfer = 0.001
+  const inboundAddress = await bnbClient.getBinanceInboundAddress()
+  try {
+    const liquidityPoolHash = await bnbClient.addLiquidityPool(
+      amountToTransfer,
+      inboundAddress,
+      dojAddress,           // optional dojima address
+    )
+    console.log('Liquidity pool hash : ', liquidityPoolHash)
+  } catch (error) {
+    console.log(`Caught ${error}`)
+  }
+}
+```
+
+### Swap BNB tokens
+
+- Swap BNB tokens to required token using receiver address
+- Get Binance Inbound address from hermes chain
+- Supported tokens for swapping - 'AR', 'DOT', 'DOJ', 'ETH', 'SOL'
+
+```ts
+import {SwapAssetList} from '@d11k-ts/utils'
+
+const swapBNB = async () => {
+  let amountToTransfer = 0.001
+  const inboundAddress = await bnbClient.getBinanceInboundAddress()
+  try {
+    const swapHash = await bnbClient.swap(
+       amountToTransfer,
+      SwapAssetList,
+      inboundAddress,
+      reciepient                // Respective receiver SwapAssetList token address
+    )
+    console.log('Swap tx hash : ', swapHash)
+  } catch (error) {
+    console.log(`Caught ${error}`)
+  }
+}
 ```
 
 ### Example Code
