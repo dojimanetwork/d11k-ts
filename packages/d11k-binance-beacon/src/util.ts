@@ -3,7 +3,7 @@ import { AssetBNB, assetAmount, assetFromString, assetToBase, baseAmount } from 
 
 import { Account, DexFees, Fee, TransferFee, Tx as BinanceTx, TxType as BinanceTxType } from './types/binance'
 import { Transfer, TransferEvent } from './types/binance-ws'
-import { DerivePath } from './types/common'
+import { BNB_DECIMAL, DerivePath } from './types/common'
 
 /**
  * Get `hash` from transfer event sent by Binance chain.
@@ -89,13 +89,13 @@ export const parseTx = (tx: BinanceTx): Tx | null => {
     from: [
       {
         from: tx.fromAddr,
-        amount: assetToBase(assetAmount(tx.value, 8)),
+        amount: assetToBase(assetAmount(tx.value, BNB_DECIMAL)),
       },
     ],
     to: [
       {
         to: tx.toAddr,
-        amount: assetToBase(assetAmount(tx.value, 8)),
+        amount: assetToBase(assetAmount(tx.value, BNB_DECIMAL)),
       },
     ],
     date: new Date(tx.timeStamp),
@@ -134,6 +134,7 @@ export const getPrefix = (network: Network) => {
     case Network.Stagenet:
       return 'bnb'
     case Network.Testnet:
+    case Network.DojTestnet:
       return 'tbnb'
   }
 }
