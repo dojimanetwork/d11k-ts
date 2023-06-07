@@ -9,7 +9,7 @@ async function TestHermes() {
   /** Create Client instance
    *  {@params} 'seed-phrase' and 'network'
    */
-  const hermesClient = new HermesClient({ phrase, network: Network.Testnet })
+  const hermesClient = new HermesClient({ phrase, network: Network.DojTestnet })
 
   /** Generate Address for phrase
    *

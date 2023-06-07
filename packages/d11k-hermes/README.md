@@ -59,7 +59,7 @@ const connectWallet = async () => {
   // mainnet
   const hermesClient = new HermesClient({phrase})
   // testnet
-  // const hermesClient = new HermesClient({ phrase, network: Network.Testnet })
+  // const hermesClient = new HermesClient({ phrase, network: Network.DojTestnet })
 
   let address = hermesClient.getAddress()
   console.log(`Address: ${address}`)
