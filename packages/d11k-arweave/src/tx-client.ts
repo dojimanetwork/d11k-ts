@@ -4,6 +4,7 @@ import _ from 'lodash'
 
 import { ArTxDataResult, ArTxsResult, InnerDataResult, OuterDataResult } from './types'
 import {
+  AR_DECIMAL,
   GQLResultInterface,
   GQLTransactionsResultInterface,
   convertTimestampToDateFormat,
@@ -38,8 +39,8 @@ export default class ArweaveTxClient {
       transaction_hash: tx.id,
       from: fromAddress,
       to: tx.target,
-      value: Number(tx.quantity) / Math.pow(10, 12),
-      gas_price: (Number(tx.reward) / Math.pow(10, 12)).toFixed(12),
+      value: Number(tx.quantity) / Math.pow(10, AR_DECIMAL),
+      gas_price: (Number(tx.reward) / Math.pow(10, AR_DECIMAL)).toFixed(AR_DECIMAL),
       signature: tx.signature,
     }
     return resultData

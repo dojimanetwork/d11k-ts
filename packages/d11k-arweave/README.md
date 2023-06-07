@@ -27,10 +27,10 @@ const connectWallet = async () => {
   let phrase = "phrase"
   // Mainnet
   const arClient = new ArweaveClient({phrase})
-  // testnet
+  // DojTestnet
   // const arClient = new ArweaveClient({
   //   phrase,
-  //   network: Network.Testnet,
+  //   network: Network.DojTestnet,
   //   config:{
     //   host: "ar-test.h4s.dojima.network",
     //   protocol: "https",
@@ -48,21 +48,21 @@ const connectWallet = async () => {
 }
 ```
 
-### Mint testnet 'ar' tokens using ArweaveClient
+### Mint DojTestnet 'ar' tokens using ArweaveClient
 
 - Create new Arweave client
-- Network is set to `Testnet`
+- Network is set to `DojTestnet`
 - By default `2 AR` tokens were added to address on every call
-- `Note: Testnet tokens are not useful in Mainnet`
+- `Note: DojTestnet tokens are not useful in Mainnet`
 
 ```ts
 //Connect wallet, get address, mint tokens and check balance 
 const mintTokensToWallet = async () => {
   let phrase = "phrase"
-  // testnet
+  // DojTestnet
   const arClient = new ArweaveClient({
     phrase,
-    network: Network.Testnet,
+    network: Network.DojTestnet,
     config:{
       host: "ar-test.h4s.dojima.network",
       protocol: "https",
@@ -220,7 +220,7 @@ const addARToLiquidityPool = async () => {
 
 - Swap AR tokens to required token using receiver address
 - Get Arweave Inbound address from hermes chain
-- Supported tokens for swapping - 'DOT', 'DOJ', 'ETH', 'SOL'
+- Supported tokens for swapping - 'BNB', 'DOT', 'DOJ', 'ETH', 'SOL'
 
 ```ts
 import {SwapAssetList} from '@d11k-ts/utils'

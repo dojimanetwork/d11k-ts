@@ -6,8 +6,8 @@ async function TestArweave() {
   const phrase = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn'
 
   /** Create Client instance
-   *  {@params} 'seed-phrase', 'network' and 'config' (only for testnet or stagenet)
-   *  for testnet pass
+   *  {@params} 'seed-phrase', 'network' and 'config' (only for DojTestnet)
+   *  for DojTestnet pass
           config : {
             host: 'ar-test.h4s.dojima.network',
             protocol: 'https'
@@ -16,7 +16,7 @@ async function TestArweave() {
    */
   const arClient = new ArweaveClient({
     phrase,
-    network: Network.Testnet,
+    network: Network.DojTestnet,
     config: {
       host: 'ar-test.h4s.dojima.network',
       protocol: 'https',

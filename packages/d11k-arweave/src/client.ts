@@ -5,10 +5,11 @@ import Arweave from 'arweave'
 import { getKeyFromMnemonic } from 'arweave-mnemonic-keys'
 import { ApiConfig } from 'arweave/node/lib/api'
 import Transaction, { Tag } from 'arweave/node/lib/transaction'
+import axios from 'axios'
 
 import ArweaveTxClient from './tx-client'
 import { ArTxDataResult, ArTxParams, ArTxs, ArTxsHistoryParams, GasfeeResult, TxStatusResponse } from './types'
-import { defaultArConfig } from './utils'
+import { defaultArMainnetConfig, defaultArTestnetConfig } from './utils'
 
 export interface ArweaveChainClient {
   getAddress(): Promise<string>
@@ -29,7 +30,12 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
   protected network: Network
   protected arweave: Arweave
   protected phrase = ''
-  constructor({ phrase, network = Network.Mainnet, config = defaultArConfig }: ChainClientParams & ChainConfigParams) {
+  protected apiConfig: ApiConfig
+  constructor({
+    phrase,
+    network = Network.Mainnet,
+    config = defaultArMainnetConfig,
+  }: ChainClientParams & ChainConfigParams) {
     super()
     if (phrase) {
       if (!validatePhrase(phrase)) {
@@ -38,10 +44,14 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
       this.phrase = phrase
     }
     this.network = network
-    if (this.network !== Network.Mainnet && config === defaultArConfig) {
-      throw Error(`'config' params can't be empty for 'testnet' or 'stagenet'`)
+    this.apiConfig = config
+    if (this.network === Network.Testnet || this.network === Network.Stagenet) {
+      this.apiConfig = defaultArTestnetConfig
     }
-    this.arweave = Arweave.init(config)
+    if (this.network === Network.DojTestnet && this.apiConfig === defaultArMainnetConfig) {
+      throw Error(`'config' params can't be empty for 'dojtestnet'`)
+    }
+    this.arweave = Arweave.init(this.apiConfig)
   }
 
   async getAddress(): Promise<string> {
@@ -127,6 +137,15 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
     return statusData
   }
 
+  async dummyTx(recipient: string, amount: number): Promise<string> {
+    const tag = new Tag(this.arweave.utils.stringToB64Url('memo'), this.arweave.utils.stringToB64Url(`NOOP:NOVAULT`))
+    const rawTx = await this.createTransaction(recipient, amount, tag)
+
+    const txHash = await this.signAndSend(rawTx)
+
+    return txHash
+  }
+
   async getTransactionData(txHash: string): Promise<ArTxDataResult> {
     const txData = await this.getTxData(this.arweave, txHash)
     return txData
@@ -142,7 +161,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
   }
 
   async getInboundObject(): Promise<InboundAddressResult> {
-    const response = await this.arweave.api.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+    const response = await axios.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
     if (response.status !== 200) {
       throw new Error(`Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`)
     }
