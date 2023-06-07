@@ -9,6 +9,7 @@ Utility helpers for D11k clients
 - `bn` - Utilities for using `bignumber.js`
 - `chain` - Utilities for multi-chain
 - `string` - Utilities for strings
+- `moment` - Utilities for date conversions
 
 ## Installation
 
