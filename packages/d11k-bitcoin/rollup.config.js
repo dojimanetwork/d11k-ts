@@ -34,5 +34,5 @@ export default {
       browser: true,
     }),
   ],
-  external: ['readable-stream', 'buffer', 'stream', 'string_decoder', '@d11k-ts/client', 'axios'],
+  external: ['readable-stream', 'buffer', 'stream', 'string_decoder', '@d11k-ts/client', 'axios', 'crypto', 'events'],
 }

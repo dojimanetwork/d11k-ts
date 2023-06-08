@@ -90,6 +90,7 @@ export const btcNetwork = (network: Network): Bitcoin.Network => {
     case Network.Stagenet:
       return Bitcoin.networks.bitcoin
     case Network.Testnet:
+    case Network.DojTestnet:
       return Bitcoin.networks.testnet
   }
 }
@@ -121,6 +122,7 @@ export const getBalance = async ({
         },
       ]
     case Network.Testnet:
+    case Network.DojTestnet:
       return [
         {
           asset: AssetBTC,
@@ -190,6 +192,7 @@ export const scanUTXOs = async ({
   withTxHex = false,
 }: ScanUTXOParam): Promise<UTXO[]> => {
   switch (network) {
+    case Network.DojTestnet:
     case Network.Testnet: {
       const addressParam: AddressParams = {
         sochainUrl,
@@ -391,6 +394,7 @@ export const getPrefix = (network: Network) => {
     case Network.Stagenet:
       return 'bc1'
     case Network.Testnet:
+    case Network.DojTestnet:
       return 'tb1'
   }
 }
