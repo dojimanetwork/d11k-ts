@@ -34,10 +34,10 @@ const connectWallet = async () => {
   let phrase = "phrase"
   // Mainnet
   const solClient = new SolanaClient({phrase})
-  // devnet
+  // DojTestnet
   // const solClient = new SolanaClient({
   //    phrase, 
-  //    network: Network.Testnet
+  //    network: Network.DojTestnet
   //    endpoint: 'https://sol-test.h4s.dojima.network:8899'
   // })
   let address = solClient.getAddress()
@@ -185,7 +185,7 @@ const addSOLToLiquidityPool = async () => {
 
 - Swap SOL tokens to required token using receiver address
 - Get Solana Inbound address from hermes chain
-- Supported tokens for swapping - 'DOT', 'DOJ', 'ETH', 'AR'
+- Supported tokens for swapping - 'BNB', 'DOT', 'DOJ', 'ETH', 'AR'
 
 ```ts
 import {SwapAssetList} from '@d11k-ts/utils'

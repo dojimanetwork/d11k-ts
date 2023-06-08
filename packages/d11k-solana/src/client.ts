@@ -25,7 +25,7 @@ export type ChainEndpointParams = {
   endpoint?: string
 }
 
-export const defaultSolEndpoint = web3.clusterApiUrl('mainnet-beta')
+export const defaultSolEndpoint = 'mainnet-beta'
 
 class SolanaClient implements SolanaChainClient {
   protected network: Network
@@ -46,10 +46,14 @@ class SolanaClient implements SolanaChainClient {
     }
     this.network = network
     this.cluster = this.getCluster()
-    if (this.network !== Network.Mainnet && endpoint === defaultSolEndpoint) {
-      throw Error(`'endpoint' param can't be empty for 'testnet' or 'stagenet'`)
+    if (this.network === Network.DojTestnet && endpoint === defaultSolEndpoint) {
+      throw Error(`'endpoint' params can't be empty for 'doj-testnet'`)
     }
-    this.connection = new web3.Connection(endpoint, 'confirmed')
+    if (this.network === Network.DojTestnet) {
+      this.connection = new web3.Connection(endpoint, 'confirmed')
+    } else {
+      this.connection = new web3.Connection(web3.clusterApiUrl(this.cluster), 'confirmed')
+    }
   }
 
   getCluster(): web3.Cluster {
@@ -59,6 +63,7 @@ class SolanaClient implements SolanaChainClient {
       case Network.Stagenet:
         return 'devnet'
       case Network.Testnet:
+      case Network.DojTestnet:
         return 'testnet'
     }
   }
@@ -140,6 +145,14 @@ class SolanaClient implements SolanaChainClient {
     if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
 
     return txHash
+  }
+
+  async dummyTx(recipient: string, amount: number): Promise<string> {
+    const toAmount = baseToLamports(amount, SOL_DECIMAL)
+    const memo = `NOOP:NOVAULT`
+    const poolHash = await this.solanaBatchTxsToHermes(toAmount, recipient, memo)
+    // await this.connection.confirmTransaction(swapHash);
+    return poolHash
   }
 
   async getTransactionData(txId: string, state?: web3.Finality): Promise<SolTxData> {
