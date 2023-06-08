@@ -30,10 +30,10 @@ const connectWallet = async () => {
   const dojClient = new DojimaClient({
     phrase
   })
-  // testnet
+  // DojTestnet
   // const dojClient = new DojimaClient({ 
   //    phrase, 
-  //    network: Network.Testnet,
+  //    network: Network.DojTestnet,
   //    rpcUrl: 'https://api-test.d11k.dojima.network:8545/',
   //  })
   let address = dojClient.getAddress()

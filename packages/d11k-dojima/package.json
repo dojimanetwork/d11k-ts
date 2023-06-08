@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/dojima",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "dojima module for d11k chain",
   "keywords": [
     "d11k",
@@ -37,21 +37,21 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/client": "^0.1.6",
     "@d11k-ts/crypto": "^0.1.1",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
     "web3": "^1.8.1"
   },
   "devDependencies": {
-    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/client": "^0.1.6",
     "@d11k-ts/crypto": "^0.1.1",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
     "web3": "^1.8.1"
   },
   "peerDependencies": {
-    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/client": "^0.1.6",
     "@d11k-ts/crypto": "^0.1.1",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",

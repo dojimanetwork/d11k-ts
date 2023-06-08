@@ -8,14 +8,14 @@ async function checkDoj() {
   /** Create Client instance
    *  {@params}
    *    'seed-phrase' and 'network'
-   *    for devnet/testnet pass {
+   *    for DojTestnet/devnet/testnet pass {
    *      endpoint: 'https://api-test.d11k.dojima.network:8545/'
    *    }
    *    infuraApiKey: string, Optional (Api key provided by 'Infura' for mainnet calls. Sign up for getting one)
    */
   const dojClient = new DojimaClient({
     phrase,
-    network: Network.Testnet,
+    network: Network.DojTestnet,
     rpcUrl: 'https://api-test.d11k.dojima.network:8545/',
   })
 
