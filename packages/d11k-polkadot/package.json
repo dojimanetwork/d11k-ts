@@ -1,6 +1,6 @@
 {
   "name": "@d11k-ts/polkadot",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "polkadot module for d11k chain",
   "keywords": [
     "d11k",
@@ -38,7 +38,7 @@
     "url": "https://github.com/dojimanetwork/d11k-ts/issues"
   },
   "dependencies": {
-    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/client": "^0.1.6",
     "@d11k-ts/crypto": "^0.1.1",
     "@polkadot/api": "^9.9.1",
     "@polkadot/util": "^10.2.1",
@@ -46,7 +46,7 @@
     "bignumber.js": "^9.1.1"
   },
   "devDependencies": {
-    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/client": "^0.1.6",
     "@d11k-ts/crypto": "^0.1.1",
     "@polkadot/api": "^9.9.1",
     "@polkadot/util": "^10.2.1",
@@ -54,7 +54,7 @@
     "bignumber.js": "^9.1.1"
   },
   "peerDependencies": {
-    "@d11k-ts/client": "^0.1.5",
+    "@d11k-ts/client": "^0.1.6",
     "@d11k-ts/crypto": "^0.1.1",
     "@polkadot/api": "^9.9.1",
     "@polkadot/util": "^10.2.1",

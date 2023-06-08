@@ -14,6 +14,7 @@ export type ChainProviderParams = {
 }
 
 export const defaultDotProvider = 'wss://rpc.polkadot.io'
+export const testnetDotProvider = 'wss://westend-rpc.polkadot.io'
 export const DOT_DECIMAL = 10
 
 export interface PolkaChainClient {
@@ -42,7 +43,14 @@ class PolkadotClient implements PolkaChainClient {
       this.phrase = phrase
     }
     this.network = network
-    this.provider = provider
+    if (this.network === Network.DojTestnet && provider === defaultDotProvider) {
+      throw Error(`'provider' params can't be empty for 'doj-testnet'`)
+    }
+    if (this.network === Network.Testnet) {
+      this.provider = testnetDotProvider
+    } else {
+      this.provider = provider
+    }
   }
 
   rpcProvider(): WsProvider {
@@ -88,13 +96,15 @@ class PolkadotClient implements PolkaChainClient {
     // const dm = new BN(freeBalance).divmod(base)
     // const resultBalance = parseFloat(dm.div.toString() + '.' + dm.mod.toString())
     // return resultBalance
-    const baseValue = new BigNumber(`${balance.free}`).div(10 ** DOT_DECIMAL).decimalPlaces(DOT_DECIMAL)
+    const baseValue = new BigNumber(`${balance.free}`)
+      .div(10 ** (this.network === Network.Testnet ? 12 : DOT_DECIMAL))
+      .decimalPlaces(this.network === Network.Testnet ? 12 : DOT_DECIMAL)
     return baseValue.toNumber()
   }
 
   async buildTx({ recipient, amount }: PolkaTxParams): Promise<rawTxType> {
     const api = await this.createInstance()
-    const toAmount = amount * Math.pow(10, DOT_DECIMAL)
+    const toAmount = amount * Math.pow(10, this.network === Network.Testnet ? 12 : DOT_DECIMAL)
     const rawTx: rawTxType = api.tx.balances.transfer(recipient, toAmount)
     return rawTx
   }
@@ -105,10 +115,15 @@ class PolkadotClient implements PolkaChainClient {
     return hash.toHex()
   }
 
+  async dummyTx(recipient: string, amount: number): Promise<string> {
+    const txHash = await this.polkaBatchTxsToHermes(amount, recipient, 'memo:NOOP:NOVAULT')
+    return txHash
+  }
+
   async getFees({ recipient, amount }: PolkaTxParams): Promise<GasfeeResult> {
     const rawTx = await this.buildTx({ recipient, amount })
     const paymentInfo = await rawTx.paymentInfo(await this.getAddress())
-    const gasFee = paymentInfo.partialFee.toNumber() / Math.pow(10, DOT_DECIMAL)
+    const gasFee = paymentInfo.partialFee.toNumber() / Math.pow(10, this.network === Network.Testnet ? 12 : DOT_DECIMAL)
     return {
       slow: gasFee,
       average: gasFee,
@@ -135,7 +150,7 @@ class PolkadotClient implements PolkaChainClient {
   async getDefaultLiquidityPoolGasFee(): Promise<number> {
     const inboundObj = await this.getInboundObject()
 
-    const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, DOT_DECIMAL)
+    const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, this.network === Network.Testnet ? 12 : DOT_DECIMAL)
 
     return gasFee
   }

@@ -7,13 +7,13 @@ async function checkPolka() {
 
   /** Create Client instance
    *  {@params} 'seed-phrase' and 'network'
-   * for testnet/devnet pass {
+   * for DojTestnet pass {
    *    provider: 'wss://dotws-test.h4s.dojima.network:9944'
    *  }
    */
   const polkaClient = new PolkadotClient({
     phrase,
-    network: Network.Testnet,
+    network: Network.DojTestnet,
     provider: 'wss://dotws-test.h4s.dojima.network:9944',
   })
 
@@ -100,8 +100,8 @@ async function checkPolka() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList     (Ex: AR.AR, D11K.DOJ, ETH.ETH, SOL.SOL)
-   *     inboundAddress: string // ArIBaddress (Get using getPolkadotInboundAddress() method)
+   *    token: SwapAssetList     (Ex: AR.AR, BNB.BNB, D11K.DOJ, ETH.ETH, SOL.SOL)
+   *     inboundAddress: string // DOTIBaddress (Get using getPolkadotInboundAddress() method)
    *     recipient: string (respective recipient token address)
    *
    * {@returns} tx hash: string
@@ -112,6 +112,13 @@ async function checkPolka() {
   // console.log('Swap tx hash : ', arswapHash)
   // const ethswapHash = await polkaClient.swap(2,'ETH.ETH', inboundAddress, '0x0577e1E35C4f30cA8379269B7Fd85cBCE7F084f4')
   // console.log('ETH Swap tx hash : ', ethswapHash)
+  // const bnbswapHash = await polkaClient.swap(
+  //   3,
+  //   'BNB.BNB',
+  //   inboundAddress,
+  //   'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu',
+  // )
+  // console.log('BNB Swap tx hash : ', bnbswapHash)
   const solswapHash = await polkaClient.swap(
     3,
     'SOL.SOL',

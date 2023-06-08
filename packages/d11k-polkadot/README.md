@@ -27,10 +27,10 @@ const connectWallet = async () => {
   let phrase = "phrase"
   // Mainnet
   const polkaClient = new PolkadotClient({phrase})
-  // testnet
+  // DojTestnet
   // const polkaClient = new PolkadotClient({ 
   //    phrase, 
-  //    network: Network.Testnet 
+  //    network: Network.DojTestnet 
   //    provider: 'wss://dotws-test.h4s.dojima.network:9944'
   // })
   let address = polkaClient.getAddress()
@@ -158,7 +158,7 @@ const addDotToLiquidityPool = async () => {
 
 - Swap DOT tokens to required token using receiver address
 - Get Polkadot Inbound address from hermes chain
-- Supported tokens for swapping - 'AR', 'DOJ', 'ETH', 'SOL'
+- Supported tokens for swapping - 'AR', 'BNB', 'DOJ', 'ETH', 'SOL'
 
 ```ts
 import {SwapAssetList} from '@d11k-ts/utils'
