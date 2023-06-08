@@ -7,18 +7,27 @@ async function checkEth() {
   const phrase = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn'
 
   /** Create Client instance
-   *  {@params}
+   * {@params}
    *    'seed-phrase' and 'network'
+   *    for doj-testnet pass {
+   *      rpcUrl: 'https://eth-test.h4s.dojima.network/'
+   *      (Not working?)
+   *      rpcUrl: 'https://eth-test.h4s.dojima.network:9545/'
+   *    }
    *    for devnet/testnet pass {
-   *      endpoint: 'https://eth-test.h4s.dojima.network/'  or  'https://eth-test.h4s.dojima.network:9545/'
+   *      rpcUrl: 'https://goerli.infura.io/v3/'
    *    }
    *    infuraApiKey: string, Optional (Api key provided by 'Infura' for mainnet calls. Sign up for getting one)
    */
   const ethClient = new EthereumClient({
     phrase,
-    network: Network.Testnet,
+    // DojTestnet doesn't provide txs list
+    network: Network.DojTestnet,
     rpcUrl: 'https://eth-test.h4s.dojima.network/',
     // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+    // network: Network.Testnet,
+    // rpcUrl: 'https://goerli.infura.io/v3/',
+    // infuraApiKey: 'f37faaf5ddeb4e589d6f26300ed673a6',
   })
 
   /** Generate Address for phrase
@@ -72,6 +81,24 @@ async function checkEth() {
   )
   console.log('Tx data :: ', txData)
 
+  /** Get transaction history of address
+   * {@params}
+   *     address: string      // Address to get history for
+   *     apiKey: string       // Etherscan Apikey
+   *     page?: number        // Optional Page. Default 1
+   *     limit?: number       // Optional Limit of transactions. Default 10
+   *     sort?: SortType      // Optional sort txs result ('asc' or 'desc'). Default 'desc'
+   *     startBlock?: number  // Optional start block number. Default 0
+   *     endBlock?: number    // Optional end block number. Default 99999999
+   *
+   * {@returns} txs history: EthTxs
+   * */
+  const txs = await ethClient.getTransactionsHistory({
+    address: '0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4',
+    apiKey: 'J19V58VEVM69RDGJHNH69M42F2J4BFDVIV',
+  })
+  console.log('Txs : ', txs)
+
   /** Get Ethereum Inbound address
    *
    * {@returns} Eth Inbound address: string
@@ -104,8 +131,8 @@ async function checkEth() {
   /** Swap token from liquidity pool to receiver address
    * {@params}
    *     amount: number
-   *     token: SwapAssetList     (Ex: AR.AR, DOT.DOT, D11K.DOJ, SOL.SOL)
-   *     inboundAddress: string // SolIBaddress (Get using getArweaveInboundAddress() method)
+   *    token: SwapAssetList     (Ex: AR.AR, BNB.BNB, DOT.DOT, D11K.DOJ, SOL.SOL)
+   *     inboundAddress: string // ETHIBaddress (Get using getEthereumInboundAddress() method)
    *     recipient: string (Dojima address)
    *
    * {@returns} tx hash: string
@@ -116,6 +143,8 @@ async function checkEth() {
   // console.log('Swap tx hash : ', arswapHash)
   // const dotswapHash = await ethClient.swap(3,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
   // console.log('DOT Swap tx hash : ', dotswapHash)
+  // const bnbswapHash = await ethClient.swap(3, 'BNB.BNB', inboundAddress, 'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu')
+  // console.log('BNB Swap tx hash : ', bnbswapHash)
   const solswapHash = await ethClient.swap(3, 'SOL.SOL', inboundAddress, 'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
   console.log('SOL Swap tx hash : ', solswapHash)
 

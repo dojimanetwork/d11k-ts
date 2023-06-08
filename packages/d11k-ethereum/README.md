@@ -32,10 +32,14 @@ const connectWallet = async () => {
   })
   // testnet
   // const ethClient = new EthereumClient({ 
-  //    phrase, 
-  //    network: Network.Testnet,
-  //    rpcUrl: 'https://eth-test.h4s.dojima.network/',  // or
+  //    phrase,
+  //    network: Network.DojTestnet,
+  //    rpcUrl: 'https://eth-test.h4s.dojima.network/',
+  //        If above rpc url doesn't work use below one
   //    rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+  //    network: Network.Testnet,
+  //    rpcUrl: 'https://goerli.infura.io/v3/',
+  //    infuraApiKey: '***********************',
   //  })
   let address = ethClient.getAddress()
   try {
@@ -79,6 +83,9 @@ const transferEth = async () => {
 
 - Create new EthereumClient instance
 - Call getTransactionData(hash) returns hash-details
+- Call getTransactionsHistory(address) returns list of transactions (if any)
+- Get 'Etherscan' api key for txs list
+- Note : DojTestnet doesn't provide txs list
 
 ```ts
 // Retrieve transaction data for a particular hash
@@ -93,6 +100,22 @@ const transactionData = async () => {
     console.log(`Caught: ${error} `)
   }
 }
+
+// Retrieve transaction history for a particular address
+const transactionHistory = async () => {
+  let Address = ethClient.getAddress()
+  try {
+    const txHistory = await ethClient.getTransactionsHistory({
+      address: Address,
+      apiKey: '********',
+    })
+    console.log(`Found ${txHistory.total.toString()}`)
+    txHistory.txs.forEach(tx => console.log(tx))
+  } catch (error) {
+    console.log(`Caught: ${error} `)
+  }
+}
+
 ```
 
 ### Get transfer Fees estimations

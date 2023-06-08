@@ -4,10 +4,19 @@ import { InboundAddressResult, SwapAssetList } from '@d11k-ts/utils'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import * as ethers from 'ethers'
+import moment from 'moment'
 import Web3 from 'web3'
 
 import { ETH_DECIMAL, defaultEthInfuraRpcUrl, defaultInfuraApiKey } from './const'
-import { EthTransferParams, EthTxData, GasfeeResult } from './eth-types'
+import {
+  EthTransferParams,
+  EthTxData,
+  EthTxDetailsResult,
+  EthTxHistoryParams,
+  EthTxs,
+  GasfeeResult,
+  TransactionHistoryResult,
+} from './eth-types'
 
 export type EthRpcParams = {
   rpcUrl?: string
@@ -20,6 +29,7 @@ class EthereumClient {
   protected rpcUrl: string
   protected account: ethers.ethers.Wallet
   protected phrase = ''
+  protected api = ''
 
   constructor({
     phrase,
@@ -34,10 +44,13 @@ class EthereumClient {
       this.phrase = phrase
     }
     this.network = network
-    if (this.network !== Network.Mainnet && rpcUrl === defaultEthInfuraRpcUrl) {
-      throw Error(`'rpcUrl' param can't be empty for 'testnet' or 'stagenet'`)
+    if (this.network === Network.DojTestnet && rpcUrl === defaultEthInfuraRpcUrl) {
+      throw Error(`'rpcUrl' param can't be empty for 'doj-testnet'`)
     }
-    if (this.network === Network.Testnet || this.network === Network.Stagenet) {
+    if ((this.network === Network.Testnet || this.network === Network.Stagenet) && rpcUrl === defaultEthInfuraRpcUrl) {
+      throw Error(`'rpcUrl/infuraKey' param can't be empty for 'testnet' or 'stagenet'`)
+    }
+    if (this.network === Network.DojTestnet) {
       this.rpcUrl = rpcUrl
       this.web3 = new Web3(this.rpcUrl)
     } else {
@@ -45,6 +58,9 @@ class EthereumClient {
       this.web3 = new Web3(new Web3.providers.HttpProvider(this.rpcUrl))
     }
     this.account = ethers.Wallet.fromMnemonic(this.phrase)
+    if (this.network === Network.Testnet || this.network === Network.Stagenet)
+      this.api = 'https://api-goerli.etherscan.io/api'
+    else this.api = 'https://api.etherscan.io/api'
   }
 
   getAddress(): string {
@@ -97,6 +113,16 @@ class EthereumClient {
     return transactionResult.transactionHash
   }
 
+  async dummyTx(recipient: string, amount: number): Promise<string> {
+    const memo = `NOOP:NOVAULT`
+    const poolHash = await this.transfer({
+      recipient,
+      amount,
+      memo,
+    })
+    return poolHash
+  }
+
   async getTransactionData(hash: string): Promise<EthTxData> {
     const data = await this.web3.eth.getTransaction(hash)
     if (data) {
@@ -113,6 +139,69 @@ class EthereumClient {
       }
     } else {
       throw new Error(`Failed to get transaction data (tx-hash: ${hash})`)
+    }
+  }
+
+  async getTransactionsHistory(params: EthTxHistoryParams) {
+    if (this.network === Network.DojTestnet) return null
+    else {
+      let requestUrl = `${this.api}?module=account&action=txlist`
+
+      if (params.address) requestUrl += `&address=${params.address}`
+      if (params.apiKey) requestUrl += `&api=${params.apiKey}`
+      if (params.limit) requestUrl += `&offset=${params.limit}`
+      else requestUrl += `&offset=10`
+      if (params.page) requestUrl += `&page=${params.page}`
+      else requestUrl += `&page=1`
+      if (params.sort) requestUrl += `&sort=${params.sort}`
+      else requestUrl += `&sort=desc`
+      if (params.startBlock) requestUrl += `&startblock=${params.startBlock}`
+      else requestUrl += `&startblock=0`
+      if (params.endBlock) requestUrl += `&endblock=${params.endBlock}`
+      else requestUrl += `&endblock=99999999`
+      const convertTimestampToDate = (timestamp: number) => {
+        return moment(timestamp).toDate().toUTCString()
+      }
+
+      const convertISOtoUTC = (date: string) => {
+        return new Date(date).toUTCString()
+      }
+
+      try {
+        const response: TransactionHistoryResult = await (await axios.get(requestUrl)).data
+        if (response.status === '1') {
+          const result: EthTxDetailsResult[] = response.result
+          if (result !== undefined) {
+            const resultTxs: EthTxs = {
+              total: result.length,
+              txs: result.map((res) => ({
+                block: Number(res.blockNumber),
+                date: moment(convertISOtoUTC(convertTimestampToDate(Number(res.timeStamp) * 1000))).format(
+                  'DD/MM/YYYY',
+                ),
+                time: moment(convertISOtoUTC(convertTimestampToDate(Number(res.timeStamp) * 1000))).format('HH:mm:ss'),
+                transaction_hash: res.hash,
+                contract_address: res.contractAddress !== '' ? res.contractAddress : 'NA',
+                value: Number(res.value) / Math.pow(10, 18),
+                gas_price: (Number(res.gasPrice) / Math.pow(10, 18)).toFixed(18),
+                from: res.from,
+                to: res.to,
+                transaction_type: res.from === params.address.toLowerCase() ? 'Send | ETH' : 'Receive | ETH',
+              })),
+            }
+            return resultTxs
+          } else {
+            return {
+              total: 0,
+              txs: [],
+            }
+          }
+        } else {
+          throw Error(`Failed to get txs list`)
+        }
+      } catch (error) {
+        throw Error(`Failed to get txs list`)
+      }
     }
   }
 
